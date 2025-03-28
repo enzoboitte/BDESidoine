@@ -18,7 +18,7 @@ function F_vRequest(string $link)
     
     $G_sAction  = isset($link) && $link != "" ? $link : "default";
     include "$G_sRacine/controler/ctlMain.php";
-    include "$G_sRacine/vue/$G_sLayout";
+    include "$G_sRacine/view/$G_sLayout";
     if($G_sLayout != "layout.php")
         $G_sLayout = "layout.php";
 }

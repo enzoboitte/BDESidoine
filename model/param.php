@@ -3,7 +3,7 @@
 /************/
 /* Settings */
 /************/
-$G_sTitle  = "MAGEERIS Formule 1";
+$G_sTitle  = "BDE Sidoine Apollinaire";
 $G_sLayout = "layout.php";
 
 

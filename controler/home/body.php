@@ -3,4 +3,4 @@ if ($_SERVER["SCRIPT_FILENAME"] == __FILE__ ){
     $G_sRacine = "..";
 }
 
-include "$G_sRacine/vue/contact.php";
+include "$G_sRacine/view/contact.php";
