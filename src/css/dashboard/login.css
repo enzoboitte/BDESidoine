@@ -1,0 +1,75 @@
+/*Connexion abonnés*/
+body{
+    color: white;
+}
+
+.cnx{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100dvh;
+    background-color: #16151E;
+    p{
+        font-size: 25px;
+        margin-bottom: 30px;
+    }
+}
+
+
+.cnx-form {
+    background-color: #1A1924;
+    padding: 40px;
+    border-radius: 10px;
+    width: 50%;
+    max-width: 600px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.cnx-form label {
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+.cnx-form input{
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-family: 'Inria', serif;
+    color: #333;
+}
+
+.cnx-form input::placeholder{
+    color: #999;
+}
+
+.btn-envoyer{
+    display: flex;
+    justify-content: center;
+    background-color: #B21E1E;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 5px;
+    margin-left: auto ;
+    margin-right: auto;
+    cursor: pointer;
+    font-size: 18px;
+    color: white;
+    font-family: 'Inria', serif;
+    transition: 0.3s ease-in-out;
+}
+
+.btn-envoyer:hover {
+    background-color: #751414;
+}
+
+.cnx-form input{
+    width: 570px;
+}
