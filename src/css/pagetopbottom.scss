@@ -1,0 +1,49 @@
+.top_page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+
+    z-index: 999;
+
+    img {
+        width: 100%;
+        height: auto;
+        
+        z-index: 1;
+        pointer-events: none;
+
+        position: absolute;
+        top: -20px;
+        left: 0;
+    }
+
+    .menu {
+        position: absolute;
+        z-index: 2;
+    }
+}
+
+.bottom_page {
+    position: fixed;
+    bottom: -80px;
+    left: 0;
+    width: 100%;
+    pointer-events: none;
+    z-index: 999;
+
+    display: flex;
+
+    img {
+        width: 100%;
+        height: auto;
+        
+        z-index: 1;
+
+    }
+
+    .menu {
+        position: absolute;
+        z-index: 2;
+    }
+}

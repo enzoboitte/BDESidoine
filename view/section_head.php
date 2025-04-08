@@ -13,7 +13,7 @@ $G_sCss .= "@import url('$G_sPath/src/css/section_head.scss');";
             <h2>Sidoine Apollinaire</h2>
         </div>
 
-        <a href="<?= $G_sPath ?>/#apropos" class="button">en savoir plus</a>
+        <a class="button" id="btn_aboutmore">en savoir plus</a>
     </div>
     <!--<img src="<?= $G_sPath ?>/src/img/background.png" alt="Logo de l'association" class="bg">-->
     <div class="bg"><img src="<?= $G_sPath ?>/src/img/background.png"></div>

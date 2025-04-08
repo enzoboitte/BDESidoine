@@ -10,7 +10,7 @@ $G_sCss .= "@import url('$G_sPath/src/css/section_apropos.scss');";
         </div>
         <p>Le Bureau des Étudiants (BDE) du lycée Sidoine Apollinaire a été créé durant l’année scolaire 2023-2024. Il a pour objectif principal de dynamiser la vie étudiante au sein de l’établissement en proposant divers événements, activités et projets tout au long de l’année.</p>
         <div class="container__img">
-            <img src="<?= $G_sPath ?>/src/img/logo_bde_sidoine.svg" alt="Logo de l'association" class="logo">
+            <img src="<?= $G_sPath ?>/src/img/evenement.jpg" alt="Logo de l'association" class="logo">
         </div>
     </div>
 </section>

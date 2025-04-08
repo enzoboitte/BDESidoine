@@ -1,0 +1,13 @@
+<svg width="1920" height="291" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="shadowTop" x="-100%" y="-100%" width="300%" height="300%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="-2" stdDeviation="10" flood-color="#000" flood-opacity="0.1" />
+    </filter>
+  </defs>
+
+  <path
+    d="M1497.53 170.759c43-12.759 239.48-151.558 272.48-154.65 33-3.094 91.42 60.794 149.99 99.749V291H0V21.908s187.622 27.45 228.619 40.596c40.997 13.145 165.488 94.723 195.486 98.589 29.998 3.867 261.482-70.752 321.977-71.139 60.496-.387 408.968 105.549 462.968 110.189 54 4.639 245.48-16.625 288.48-29.384Z"
+    fill="#fff"
+    filter="url(#shadowTop)"
+  />
+</svg>
