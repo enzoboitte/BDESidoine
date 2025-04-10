@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendrier Semaine par Semaine avec Horaires</title>
+    <style>
+                body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .calendar-container {
+            max-width: 1000px;
+            margin: auto;
+            overflow-x: auto;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: 100px repeat(7, 1fr);
+            background: #fff;
+            border: 1px solid #ddd;
+        }
+
+        .calendar-grid div {
+            padding: 5px;
+            border: 1px solid #eee;
+            text-align: center;
+            position: relative;
+        }
+
+        .time-slot {
+            background: #f8f8f8;
+            font-weight: bold;
+        }
+
+        .event {
+            background: #fff;
+            color: #555;
+            border-left: 3px solid #888;
+            padding: 5px;
+            margin-top: 2px;
+            font-size: 0.9em;
+            text-align: left;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+
+            p {
+                margin: 0;
+                font-size: 0.8em;
+                color: #333;
+            }
+
+            p.hour {
+                font-size: 0.7em;
+                color: #777;
+            }
+
+            &::after {
+                content: '';
+                display: block;
+                height: 100%;
+                width: 2px;
+                background: #ddd;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+            }
+
+            /* differente couleur en fonction des events */
+            &.event::after { background: #e0f7fa; }
+            &.reunion::after { background: #ffe0b2; }
+            &.rdv::after { background: #e1bee7; }
+            &.tache::after { background: #c8e6c9; }
+        }
+
+        button {
+            padding: 5px 10px;
+            border: none;
+            background: #007BFF;
+            color: white;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .event-form {
+            margin-top: 10px;
+            display: none;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background: #fff;
+        }
+
+        .event-form input, .event-form select {
+            margin: 5px;
+            padding: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .calendar-grid {
+                grid-template-columns: 80px repeat(7, minmax(80px, 1fr));
+            }
+
+            .calendar-grid div {
+                padding: 3px;
+                font-size: 0.8em;
+            }
+
+            .event {
+                font-size: 0.7em;
+                padding: 3px;
+            }
+
+            .event p {
+                font-size: 0.7em;
+            }
+
+            .event p.hour {
+                font-size: 0.6em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calendar-container">
+        <div class="calendar-header">
+            <button onclick="changeWeek(-1)">&lt;</button>
+            <h3 id="weekDisplay"></h3>
+            <button onclick="changeWeek(1)">&gt;</button>
+        </div>
+        <button onclick="toggleForm()">Ajouter un événement</button>
+        <div class="event-form" id="eventForm">
+            <input type="text" id="eventTitle" placeholder="Titre de l'événement">
+            <input type="date" id="eventDate">
+            <!--<select id="eventHour"></select>-->
+            <input type="time" id="eventHour" placeholder="Heure de l'événement">
+            <select id="eventType">
+                <option value="event">Événement</option>
+                <option value="reunion">Réunion</option>
+                <option value="rdv">Rendez-vous</option>
+                <option value="tache">Tâche</option>
+            </select>
+            <button onclick="submitEvent()">Ajouter</button>
+        </div>
+        <div class="calendar-grid" id="calendarGrid"></div>
+    </div>
+
+    <script>
+        let currentDate = new Date();
+        let events = [];
+
+        function renderWeek(date) {
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '<div class="time-slot"></div>';
+
+            const first = date.getDate() - date.getDay() + (date.getDay() === 0 ? -6 : 1);
+            const firstDayOfWeek = new Date(date.setDate(first));
+
+            document.getElementById('weekDisplay').textContent =
+                `Semaine du ${firstDayOfWeek.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}`;
+
+            for (let i = 0; i < 7; i++) {
+                let day = new Date(firstDayOfWeek);
+                day.setDate(firstDayOfWeek.getDate() + i);
+                grid.innerHTML += `<div>${day.toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'numeric' })}</div>`;
+            }
+
+            for (let h = 0; h < 24; h++) {
+                grid.innerHTML += `<div class="time-slot">${h.toString().padStart(2, '0')}:00</div>`;
+                for (let d = 0; d < 7; d++) {
+                    grid.innerHTML += `<div id="cell-${d}-${h}"></div>`;
+                }
+            }
+
+            displayEvents(firstDayOfWeek);
+        }
+
+        function changeWeek(direction) {
+            currentDate.setDate(currentDate.getDate() + direction * 7);
+            renderWeek(new Date(currentDate));
+        }
+
+        function toggleForm() {
+            const form = document.getElementById('eventForm');
+            form.style.display = form.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function submitEvent() {
+            const title = document.getElementById('eventTitle').value;
+            const date = document.getElementById('eventDate').value;
+            const hour = document.getElementById('eventHour').value;
+            const type = document.getElementById('eventType').value;
+            if (title && date && hour) {
+                events.push({ title, date, hour, type });
+                renderWeek(currentDate);
+                toggleForm();
+            } else {
+                alert('Merci de remplir tous les champs.');
+            }
+        }
+
+        function displayEvents(firstDayOfWeek) {
+            const weekEnd = new Date(firstDayOfWeek);
+            weekEnd.setDate(weekEnd.getDate() + 7);
+
+            events.forEach(event => {
+                const eventDate = new Date(event.date);
+                if (eventDate >= firstDayOfWeek && eventDate < weekEnd) {
+                    const dayIndex = (eventDate.getDay() + 6) % 7;
+                    const hour = parseInt(event.hour.split(':')[0]);
+                    const cell = document.getElementById(`cell-${dayIndex}-${hour}`);
+                    if (cell) {
+                        cell.innerHTML += `<div class="event ${event.type}"><p>${event.title}</p><p class="hour">${event.hour}</p></div>`;
+                    }
+                }
+            });
+        }
+
+        //document.getElementById('eventHour').innerHTML = Array.from({ length: 24 }, (_, h) => `<option>${h.toString().padStart(2, '0')}:00</option>`).join('');
+
+        renderWeek(currentDate);
+    </script>
+</body>
+</html>
