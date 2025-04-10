@@ -5,7 +5,7 @@ $G_sCss .= "@import url('$G_sPath/src/css/section_head.scss');";
 <section class="header">
     <div class="top">
         <img src="<?= $G_sPath ?>/src/img/logo_bde_sidoine.svg" alt="Logo de l'association" class="logo">
-        <img src="<?= $G_sPath ?>/src/img/login.svg" alt="Logo de l'association" class="logo_account">
+        <a href="<?= $G_sPath ?>/dashboard"><img src="<?= $G_sPath ?>/src/img/login.svg" alt="Logo de l'association" class="logo_account"></a>
     </div>
     <div class="center">
         <div class="title">

@@ -4,7 +4,7 @@ CREATE DATABASE IF NOT exists `bdBDESidoine`;
 use `bdBDESidoine`;
 
 CREATE TABLE membre(
-	idM INT,
+	idM INT auto_increment,
 	nom VARCHAR(50),
 	prenom VARCHAR(50),
 	mail VARCHAR(150),

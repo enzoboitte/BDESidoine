@@ -1,0 +1,128 @@
+.calendar-container {
+    max-width: 1000px;
+    margin: auto;
+    overflow-x: auto;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: 100px repeat(7, 1fr);
+    background: #fff;
+    border: 1px solid #ddd;
+}
+
+.calendar-grid div {
+    padding: 5px;
+    border: 1px solid #eee;
+    text-align: center;
+    position: relative;
+}
+
+.time-slot {
+    background: #f8f8f8;
+    font-weight: bold;
+}
+
+.event {
+    background: #fff;
+    color: #555;
+    border-left: 3px solid #888;
+    padding: 5px;
+    margin-top: 2px;
+    font-size: 0.9em;
+    text-align: left;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+
+    cursor: pointer;
+
+    p {
+        margin: 0;
+        font-size: 0.8em;
+        color: #333;
+    }
+
+    p.hour {
+        font-size: 0.7em;
+        color: #777;
+    }
+
+    &::after {
+        content: '';
+        display: block;
+        height: 100%;
+        width: 2px;
+        background: #ddd;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+    }
+
+    /* differente couleur en fonction des events */
+    &.event::after { background: #e0f7fa; }
+    &.reunion::after { background: #ffe0b2; }
+    &.rdv::after { background: #e1bee7; }
+    &.tache::after { background: #c8e6c9; }
+}
+
+button {
+    padding: 5px 10px;
+    border: none;
+    background: #007BFF;
+    color: white;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+.event-form {
+    margin-top: 10px;
+    display: none;
+    padding: 10px;
+    border: 1px solid #ddd;
+    background: #fff;
+}
+
+.event-form input, .event-form select {
+    margin: 5px;
+    padding: 5px;
+}
+
+@media (max-width: 768px) {
+    .calendar-grid {
+        grid-template-columns: 80px repeat(7, minmax(80px, 1fr));
+    }
+
+    .calendar-grid div {
+        padding: 3px;
+        font-size: 0.8em;
+    }
+
+    .event {
+        font-size: 0.7em;
+        padding: 3px;
+    }
+
+    .event p {
+        font-size: 0.7em;
+    }
+
+    .event p.hour {
+        font-size: 0.6em;
+    }
+}

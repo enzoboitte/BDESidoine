@@ -21,6 +21,16 @@ class CAccount extends CPDOModel
         return (int) $l_iCode;
     }
 
+    // recuperation des infos client
+    public function F_lGetInfo(): array
+    {
+        $l_cSql  = $this->F_cGetDB()->prepare("SELECT m.`nom`, m.`prenom`, m.`mail`, m.`tel` FROM `compte` c INNER JOIN `membre` m ON m.`idM` = c.`idM` WHERE `tmpkey` = :tmpkey LIMIT 0,1;");
+
+        $l_cSql->execute(["tmpkey" => $_SESSION["tmpkey"]]);
+
+        return $l_cSql->fetch(PDO::FETCH_ASSOC);
+    }
+
     public static function F_sGetRealPasswd(string $l_sPasswd): string
     {
         return sha1(sha1($l_sPasswd)."bdesid_service");

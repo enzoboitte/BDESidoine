@@ -4,8 +4,10 @@ $G_sCss .= "@import url('$G_sPath/src/css/menu.scss');";
 ?>
 <nav id="menu" class="menu">
     <ul>
-        <!-- back button -->
-        <li><a href="<?= $G_sPath ?>/"><img src="<?= $G_sPath ?>/src/img/back.svg" alt="back"></a></li>
+        <!-- back button <i class="fa fa-arrow-left"></i> -->
+        <?php if(isset($G_sBackBtn) && $G_sBackBtn): ?>
+        <li><a href="<?= $G_sPath ?>/">Accueil</a></li>
+        <?php endif; ?>
         
         <li><a href="<?= $G_sPath ?>/">Nos membres</a></li>
         <li><a href="<?= $G_sPath ?>/evenement">Nos évenement</a></li>

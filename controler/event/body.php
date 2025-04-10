@@ -19,3 +19,8 @@ var_dump($events);*/
 include "$G_sRacine/view/event.php";
 
 include "$G_sRacine/view/bottom_page.php";
+
+// modification de la couleur du background
+$G_sCss .= "body {
+    background-color: #dadada !important;
+}";

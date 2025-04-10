@@ -13,6 +13,15 @@ route('/{}', 'GET', function ($link)
     F_vRequest($link);
 });
 
+// route pour le dashboard
+route('/dashboard/{}', 'GET', function ($link) 
+{
+    global $G_sRacine;
+    include_once "$G_sRacine/model/Account.php";
+    //(new CAccount())->F_vDieSession();
+    F_vRequest("dashboard/$link");
+});
+
 function F_vRequest(string $link)
 {
     header("Content-Type: text/html");
@@ -50,8 +59,112 @@ route('/v1/account/login/{},{}', 'GET', function ($l_sIdentifier, $l_sPasswd)
         ]);
 });
 
+# /v1/account/logout
+route('/v1/account/logout', 'GET', function () 
+{
+    global $G_sRacine, $G_sPath;
+    include_once "$G_sRacine/model/Account.php";
 
+    (new CAccount())->F_vDieSession();
 
+    header("Location: $G_sPath/");
+});
+
+# /v1/event/add/{title},{date},{hour},{type}
+route('/v1/event/add/', 'POST', function () 
+{
+    global $G_sRacine;
+    include_once "$G_sRacine/model/Account.php";
+    include_once "$G_sRacine/model/Event.php";
+
+    //$l_sTitle, $l_sDate, $l_sHour, $l_sType dans le body de la requête {"title":"fghdfgh","date":"2025-04-07","hour":"15:00","type":"event"}
+    $data = json_decode(file_get_contents('php://input'), true);
+    $l_sTitle = $data['title'];
+    $l_sDate = $data['date'];
+    $l_sHour = $data['hour'];
+    $l_sType = $data['type'];
+
+    $res = (new CEvents())->F_bAddEvent($l_sTitle, $l_sDate." ".$l_sHour, "", $l_sType);
+    echo json_encode([
+            "code" => $res,
+            "msg" => "ok"
+        ]);
+});
+
+# /v1/event/rm/{id}
+route('/v1/event/rm/{id}', 'POST', function ($l_sId) 
+{
+    global $G_sRacine;
+    include_once "$G_sRacine/model/Account.php";
+    include_once "$G_sRacine/model/Event.php";
+
+    $res = (new CEvents())->F_bRmEvent($l_sId);
+    echo json_encode([
+            "code" => $res,
+            "msg" => "ok"
+        ]);
+});
+
+# /v1/event/update/{id},{title},{date},{hour},{type}
+route('/v1/event/update/{},{},{},{},{}', 'POST', function ($l_sId, $l_sTitle, $l_sDate, $l_sHour, $l_sType) 
+{
+    global $G_sRacine;
+    include_once "$G_sRacine/model/Account.php";
+    include_once "$G_sRacine/model/Event.php";
+
+    $res = (new CEvents())->F_bUpdateEvent($l_sId, $l_sTitle, $l_sDate, $l_sHour, $l_sType);
+    echo json_encode([
+            "code" => $res,
+            "msg" => "ok"
+        ]);
+});
+
+# /v1/event/get/{id}
+route('/v1/event/get/{id}', 'POST', function ($l_sId) 
+{
+    global $G_sRacine;
+    include_once "$G_sRacine/model/Account.php";
+    include_once "$G_sRacine/model/Event.php";
+
+    $e = new CEvents();
+    $e->F_vLoadAllEvents();
+    $res = $e->F_lGetEvent($l_sId);
+
+    $events = [];
+
+    foreach ($res as $event) 
+    {
+        $events[] = $event->toJson();
+    }
+    echo json_encode([
+            "code" => $events,
+            "msg" => "ok"
+        ]);
+});
+
+# /v1/event/get/all
+route('/v1/event/get/all', 'POST', function () 
+{
+    global $G_sRacine;
+    include_once "$G_sRacine/model/Account.php";
+    include_once "$G_sRacine/model/Event.php";
+
+    $e = new CEvents();
+    $e->F_vLoadAllEvents();
+    $res = $e->getEvents();
+
+    $events = [];
+
+    foreach ($res as $event) 
+    {
+        $events[] = $event->toJson();
+    }
+
+    echo json_encode([
+            "code" => $events,
+            "msg" => "ok"
+        ]);
+});
 
 
 
