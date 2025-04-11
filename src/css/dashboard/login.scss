@@ -1,0 +1,91 @@
+/* Connexion abonnés - SCSS */
+
+$color-primary: #97a8a7;
+$color-bg: #16151E;
+$color-form-bg: darken($color-bg, 3%);
+$color-text: white;
+$color-input-text: #333;
+$color-placeholder: lighten($color-input-text, 40%);
+
+body {
+  color: $color-text;
+  font-family: 'Inria', serif;
+  background-color: $color-bg;
+  margin: 0;
+  padding: 0;
+}
+
+.cnx {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .cnx-form {
+    background-color: $color-form-bg;
+    padding: 2rem;
+    border-radius: 0.75rem;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+
+    label {
+      display: block;
+      font-size: 1rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      text-align: left;
+      color: $color-primary;
+    }
+
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      color: $color-input-text;
+
+      &::placeholder {
+        color: $color-placeholder;
+      }
+
+      &:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px $color-primary;
+      }
+    }
+
+    .btn-envoyer {
+      display: block;
+      margin: 1rem auto 0 auto;
+      background-color: $color-primary;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-size: 1rem;
+      color: $color-text;
+      transition: background-color 0.3s ease;
+
+      &:hover {
+        background-color: darken($color-primary, 15%);
+      }
+    }
+
+    .msg {
+      text-align: center;
+      margin-top: 1rem;
+      color: lighten($color-primary, 20%);
+    }
+  }
+}

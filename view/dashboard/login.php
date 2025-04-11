@@ -1,6 +1,6 @@
 <?php 
 global $G_sPath, $G_sRacine;
-$G_sCss .= "@import url('$G_sPath/src/css/dashboard/login.css');";
+$G_sCss .= "@import url('$G_sPath/src/css/dashboard/login.scss');";
 
 
 include_once "$G_sRacine/model/Account.php";

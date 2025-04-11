@@ -16,8 +16,14 @@ route('/{}', 'GET', function ($link)
 // route pour le dashboard
 route('/dashboard/{}', 'GET', function ($link) 
 {
-    global $G_sRacine;
+    global $G_sRacine,$G_sPath;
     include_once "$G_sRacine/model/Account.php";
+
+    if(!(new CAccount())->F_bIsConnect())
+    {
+        header("Location: $G_sPath/");
+        exit;
+    }
     //(new CAccount())->F_vDieSession();
     F_vRequest("dashboard/$link");
 });
@@ -73,9 +79,15 @@ route('/v1/account/logout', 'GET', function ()
 # /v1/event/add/{title},{date},{hour},{type}
 route('/v1/event/add/', 'POST', function () 
 {
-    global $G_sRacine;
+    global $G_sRacine,$G_sPath;
     include_once "$G_sRacine/model/Account.php";
     include_once "$G_sRacine/model/Event.php";
+    
+    if(!(new CAccount())->F_bIsConnect())
+    {
+        header("Location: $G_sPath/");
+        exit;
+    }
 
     //$l_sTitle, $l_sDate, $l_sHour, $l_sType dans le body de la requête {"title":"fghdfgh","date":"2025-04-07","hour":"15:00","type":"event"}
     $data = json_decode(file_get_contents('php://input'), true);
@@ -94,9 +106,15 @@ route('/v1/event/add/', 'POST', function ()
 # /v1/event/rm/{id}
 route('/v1/event/rm/{id}', 'POST', function ($l_sId) 
 {
-    global $G_sRacine;
+    global $G_sRacine,$G_sPath;
     include_once "$G_sRacine/model/Account.php";
     include_once "$G_sRacine/model/Event.php";
+    
+    if(!(new CAccount())->F_bIsConnect())
+    {
+        header("Location: $G_sPath/");
+        exit;
+    }
 
     $res = (new CEvents())->F_bRmEvent($l_sId);
     echo json_encode([
@@ -108,9 +126,15 @@ route('/v1/event/rm/{id}', 'POST', function ($l_sId)
 # /v1/event/update/{id},{title},{date},{hour},{type}
 route('/v1/event/update/{},{},{},{},{}', 'POST', function ($l_sId, $l_sTitle, $l_sDate, $l_sHour, $l_sType) 
 {
-    global $G_sRacine;
+    global $G_sRacine,$G_sPath;
     include_once "$G_sRacine/model/Account.php";
     include_once "$G_sRacine/model/Event.php";
+    
+    if(!(new CAccount())->F_bIsConnect())
+    {
+        header("Location: $G_sPath/");
+        exit;
+    }
 
     $res = (new CEvents())->F_bUpdateEvent($l_sId, $l_sTitle, $l_sDate, $l_sHour, $l_sType);
     echo json_encode([
@@ -122,9 +146,15 @@ route('/v1/event/update/{},{},{},{},{}', 'POST', function ($l_sId, $l_sTitle, $l
 # /v1/event/get/{id}
 route('/v1/event/get/{id}', 'POST', function ($l_sId) 
 {
-    global $G_sRacine;
+    global $G_sRacine,$G_sPath;
     include_once "$G_sRacine/model/Account.php";
     include_once "$G_sRacine/model/Event.php";
+    
+    if(!(new CAccount())->F_bIsConnect())
+    {
+        header("Location: $G_sPath/");
+        exit;
+    }
 
     $e = new CEvents();
     $e->F_vLoadAllEvents();
@@ -145,9 +175,15 @@ route('/v1/event/get/{id}', 'POST', function ($l_sId)
 # /v1/event/get/all
 route('/v1/event/get/all', 'POST', function () 
 {
-    global $G_sRacine;
+    global $G_sRacine,$G_sPath;
     include_once "$G_sRacine/model/Account.php";
     include_once "$G_sRacine/model/Event.php";
+    
+    if(!(new CAccount())->F_bIsConnect())
+    {
+        header("Location: $G_sPath/");
+        exit;
+    }
 
     $e = new CEvents();
     $e->F_vLoadAllEvents();

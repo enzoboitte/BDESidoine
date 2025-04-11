@@ -2,6 +2,9 @@
 global $G_sPath;
 $G_sCss .= "@import url('$G_sPath/src/css/dashboard/calendar.scss');";
 ?>
+<!-- back button -->
+<a href="<?= $G_sPath ?>/dashboard/" class="back-button">Retour</a>
+
 <div class="calendar-container">
     <div class="calendar-header">
         <button onclick="changeWeek(-1)">&lt;</button>
