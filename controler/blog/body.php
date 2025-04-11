@@ -14,5 +14,6 @@ if ($search) {
 } else {
     $articles = $blogModel->getAllArticles($sort);
 }
-
+$G_sBackBtn=true;
+include "$G_sRacine/view/menu.php";
 include "$G_sRacine/view/blog.php";
