@@ -3,19 +3,21 @@ CREATE DATABASE IF NOT exists `bdBDESidoine`;
 
 use `bdBDESidoine`;
 
+CREATE TABLE role(
+	idRo INT,
+	libelle VARCHAR(50),
+	PRIMARY KEY(idRo)
+) Engine=InnoDB;
+
 CREATE TABLE membre(
 	idM INT auto_increment,
 	nom VARCHAR(50),
 	prenom VARCHAR(50),
 	mail VARCHAR(150),
 	tel char,
+	idRo INT NOT NULL,
+	FOREIGN KEY(idRo) REFERENCES role(idRo),
 	PRIMARY KEY(idM)
-) Engine=InnoDB;
-
-CREATE TABLE groupe(
-	idG INT,
-	libelle VARCHAR(50),
-	PRIMARY KEY(idG)
 ) Engine=InnoDB;
 
 CREATE TABLE regle(
@@ -29,12 +31,6 @@ CREATE TABLE annee(
 	idA DATE,
 	libelle VARCHAR(50),
 	PRIMARY KEY(idA)
-) Engine=InnoDB;
-
-CREATE TABLE role(
-	idRo INT,
-	libelle VARCHAR(50),
-	PRIMARY KEY(idRo)
 ) Engine=InnoDB;
 
 CREATE TABLE type_event(
@@ -59,11 +55,9 @@ CREATE TABLE compte(
 	idC INT,
 	mdp VARCHAR(150),
 	tmpkey varchar(300) DEFAULT '',
-	idG INT NOT NULL,
 	idM INT NOT NULL,
 	PRIMARY KEY(idC),
 	UNIQUE(idM),
-	FOREIGN KEY(idG) REFERENCES groupe(idG),
 	FOREIGN KEY(idM) REFERENCES membre(idM)
 ) Engine=InnoDB;
 
@@ -87,49 +81,22 @@ CREATE TABLE image(
 ) Engine=InnoDB;
 
 CREATE TABLE contient(
-	idG INT,
+	idRo INT,
 	idR INT,
-	PRIMARY KEY(idG, idR),
-	FOREIGN KEY(idG) REFERENCES groupe(idG),
+	PRIMARY KEY(idRo, idR),
+	FOREIGN KEY(idRo) REFERENCES role(idRo),
 	FOREIGN KEY(idR) REFERENCES regle(idR)
-) Engine=InnoDB;
-
-CREATE TABLE etre(
-	idM INT,
-	idA DATE,
-	PRIMARY KEY(idM, idA),
-	FOREIGN KEY(idM) REFERENCES membre(idM),
-	FOREIGN KEY(idA) REFERENCES annee(idA)
 ) Engine=InnoDB;
 
 CREATE TABLE nommer(
 	idM INT,
 	idRo INT,
-	PRIMARY KEY(idM, idRo),
+	idA DATE,
+	PRIMARY KEY(idM, idA),
 	FOREIGN KEY(idM) REFERENCES membre(idM),
-	FOREIGN KEY(idRo) REFERENCES role(idRo)
+	FOREIGN KEY(idRo) REFERENCES role(idRo),
+	FOREIGN KEY(idA) REFERENCES annee(idA)
 ) Engine=InnoDB;
-
--- Inserts table membre
-INSERT INTO membre VALUES
-(1, 'enzo', 'boitte', 'jean.dupont@mail.com', '3'),
-(2, 'Martin', 'Alice', 'alice.martin@mail.com', '4'),
-(3, 'Durand', 'Louis', 'louis.durand@mail.com', '2');
-
--- Inserts table groupe
-INSERT INTO groupe VALUES
-(1, 'Admin'),
-(2, 'Utilisateur');
-
--- Inserts table regle
-INSERT INTO regle VALUES
-(1, 'Créer Post', 'CREATE_POST'),
-(2, 'Supprimer Post', 'DELETE_POST');
-
--- Inserts table annee
-INSERT INTO annee VALUES
-('2024-01-01', '2024'),
-('2025-01-01', '2025');
 
 -- Inserts table role
 INSERT INTO role VALUES
@@ -141,6 +108,28 @@ INSERT INTO role VALUES
 (6, 'Responsable Événementiel'),
 (7, 'Responsable Partenariats'),
 (8, 'Community Manager');
+
+-- Inserts table membre
+INSERT INTO membre VALUES
+(1, 'enzo', 'boitte', 'jean.dupont@mail.com', '3', 1),
+(2, 'Martin', 'Alice', 'alice.martin@mail.com', '4', 2),
+(3, 'Durand', 'Louis', 'louis.durand@mail.com', '2', 3);
+
+-- Inserts table regle
+INSERT INTO regle VALUES
+(1, 'Créer un post', 'CREATE_POST'),
+(2, 'Supprimer un post', 'DELETE_POST'),
+(3, 'Modifier un post', 'UPDATE_POST'),
+(4, 'Lire un post', 'READ_POST'),
+(9, 'Créer un événement', 'CREATE_EVENT'),
+(10, 'Supprimer un événement', 'DELETE_EVENT'),
+(11, 'Modifier un événement', 'UPDATE_EVENT'),
+(12, 'Lire un événement', 'READ_EVENT');
+
+-- Inserts table annee
+INSERT INTO annee VALUES
+('2024-01-01', '2024'),
+('2025-01-01', '2025');
 
 -- Inserts table type event
 INSERT INTO type_event VALUES
@@ -156,8 +145,8 @@ INSERT INTO event VALUES
 
 -- Inserts table compte
 INSERT INTO compte VALUES
-(1, '906b87053567bb4a8a4038832323c5bf4dccf881', '', 1, 1),
-(2, 'hashed_password2', '', 2, 2);
+(1, '906b87053567bb4a8a4038832323c5bf4dccf881', '', 1),
+(2, 'hashed_password2', '', 2);
 
 -- Inserts table poste
 INSERT INTO poste VALUES
@@ -175,15 +164,10 @@ INSERT INTO contient VALUES
 (1, 2),
 (2, 1);
 
--- Inserts table etre
-INSERT INTO etre VALUES
-(1, '2024-01-01'),
-(2, '2025-01-01');
-
 -- Inserts table nommer
 INSERT INTO nommer VALUES
-(1, 1),
-(2, 2);
+(1, 1, '2024-01-01'),
+(1, 2, '2025-01-01');
 
 
 
