@@ -39,4 +39,16 @@ $G_sCss .= "@import url('$G_sPath/src/css/blog/blog.css');"; ?>
         <?php endforeach; ?>
     <?php endif; ?>
 </div>
+
+<!-- Pagination -->
+<div class="pagination">
+    <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
+        <a href="index.php?link=blog&search=<?= urlencode($search) ?>&sort=<?= $sort ?>&page=<?= $i ?>" 
+           class="<?= ($i == $page) ? 'active' : '' ?>">
+            <?= $i ?>
+        </a>
+    <?php endfor; ?>
+</div>
+
+
 </section>

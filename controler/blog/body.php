@@ -1,19 +1,20 @@
 <?php
-if ($_SERVER["SCRIPT_FILENAME"] == __FILE__) {
-    $G_sRacine = "..";
-}
+require_once 'model/BlogModel.php'; // Fichier avec une majuscule !
 
-require_once "$G_sRacine/model/BlogModel.php";
-$blogModel = new BlogModel();
-$articles = $blogModel->getAllArticles();
-$search = $_GET['search'] ?? null;
+$search = $_GET['search'] ?? '';
 $sort = $_GET['sort'] ?? 'desc';
+$page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+$limit = 5;
+$offset = ($page - 1) * $limit;
 
-if ($search) {
-    $articles = $blogModel->searchArticles($search, $sort);
-} else {
-    $articles = $blogModel->getAllArticles($sort);
-}
-$G_sBackBtn=true;
+// ✅ Utilisation de la bonne classe définie dans BlogModel.php
+$articleModel = new CArticle();
+
+$totalArticles = $articleModel->countArticles($search);
+$totalPages = ceil($totalArticles / $limit);
+
+$articles = $articleModel->getArticles($search, $sort, $limit, $offset);
+
+$G_sBackBtn = true;
 include "$G_sRacine/view/menu.php";
 include "$G_sRacine/view/blog.php";

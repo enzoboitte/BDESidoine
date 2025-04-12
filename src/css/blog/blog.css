@@ -126,3 +126,29 @@ body {
     margin-top: 2rem;
     animation: fadeIn 0.4s ease;
 }
+
+.pagination {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.pagination a {
+    display: inline-block;
+    margin: 0 5px;
+    padding: 8px 12px;
+    background-color: #f0f0f0;
+    color: #333;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+
+.pagination a:hover {
+    background-color: #d5d5d5;
+}
+
+.pagination a.active {
+    background-color: #b35e5e;
+    color: white;
+    font-weight: bold;
+}
