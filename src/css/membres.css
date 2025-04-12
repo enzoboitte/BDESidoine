@@ -1,0 +1,193 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #f7f7f7;
+    color: #333;
+}
+
+.titre-page {
+    text-align: center;
+    font-size: 2.8rem;
+    margin: 2rem 0 1.5rem;
+    color: #3a1d1d;
+}
+
+.form-annee {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.form-annee label {
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.form-annee select {
+    padding: 8px 14px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: white;
+    transition: all 0.2s ease;
+    margin-left: 0.5rem;
+}
+
+.form-annee select:focus {
+    border-color: #b37c7d;
+    box-shadow: 0 0 6px rgba(179, 124, 125, 0.5);
+    outline: none;
+}
+
+.organigramme-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    padding: 0 1rem 4rem;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #6e2727;
+}
+
+.niveau,
+.niveau-responsable,
+.niveau-membres {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.niveau-wrapper,
+.pole {
+    background: #fff;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 1000px;
+    text-align: center;
+    position: relative;
+}
+
+.membre {
+    background: radial-gradient(circle at 30% 30%, #b35e5e, #a64646);
+    border-radius: 50%;
+    color: white;
+    width: 180px;
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 1rem;
+    box-shadow: 0 10px 18px rgba(0, 0, 0, 0.12);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.membre:hover {
+    transform: scale(1.08);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+}
+
+.membre img {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid white;
+    margin-bottom: 0.5rem;
+    transition: transform 0.3s ease;
+}
+
+.membre:hover img {
+    transform: scale(1.12);
+}
+
+.membre strong {
+    font-size: 1rem;
+    line-height: 1.2;
+}
+
+.membre span {
+    font-size: 0.8rem;
+    font-weight: 300;
+    color: #f0f0f0;
+    padding: 0 0.4rem;
+}
+
+/* Trait sous le responsable */
+.responsable::after {
+    content: '';
+    width: 2px;
+    height: 40px;
+    background: #999;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+@media (max-width: 992px) {
+    .membre {
+        width: 150px;
+        height: 150px;
+    }
+
+    .membre img {
+        width: 70px;
+        height: 70px;
+    }
+
+    .titre-page {
+        font-size: 2.3rem;
+    }
+
+    h2 {
+        font-size: 1.7rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .membre {
+        width: 120px;
+        height: 120px;
+        padding: 0.5rem;
+    }
+
+    .membre img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .membre strong {
+        font-size: 0.85rem;
+    }
+
+    .membre span {
+        font-size: 0.65rem;
+    }
+
+    h2 {
+        font-size: 1.4rem;
+    }
+}
