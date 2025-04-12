@@ -29,3 +29,5 @@ $G_sHeader = ob_get_clean();
 ob_start();
 include "$G_sRacine/controler/$G_sFichier/body.php";
 $G_sBody = ob_get_clean();
+
+

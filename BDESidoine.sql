@@ -15,7 +15,6 @@ CREATE TABLE membre(
 	prenom VARCHAR(50),
 	mail VARCHAR(150),
 	tel char,
-	photoM VARCHAR(255),
 	idRo INT NOT NULL,
 	FOREIGN KEY(idRo) REFERENCES role(idRo),
 	PRIMARY KEY(idM)
@@ -73,13 +72,6 @@ CREATE TABLE poste(
 	FOREIGN KEY(idC) REFERENCES compte(idC)
 ) Engine=InnoDB;
 
-CREATE TABLE posteImages (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    poste_id INT NOT NULL,
-    filename VARCHAR(255) NOT NULL,
-    FOREIGN KEY (poste_id) REFERENCES poste(idP) ON DELETE CASCADE
-);
-
 CREATE TABLE image(
 	idI INT auto_increment,
 	idP INT,
@@ -111,24 +103,17 @@ INSERT INTO role VALUES
 (1, 'Président'),
 (2, 'Trésorier'),
 (3, 'Vice-président'),
-(4, 'Vice-Trésorier'),
-(5, 'Secrétaire'),
-(6, 'Vice-Secrétaire'),
-(7, 'Responsable Communication'),
+(4, 'Secrétaire'),
+(5, 'Responsable Communication'),
 (6, 'Responsable Événementiel'),
-(8, 'Responsable Sécurité'),
-(9,'Membre Communication')
-(10,'Membre Événementiel')
-(11,'Membre Sécurité')
-(12,'Administrateur')
-
+(7, 'Responsable Partenariats'),
+(8, 'Community Manager');
 
 -- Inserts table membre
 INSERT INTO membre VALUES
-(1, 'enzo', 'boitte', 'jean.dupont@mail.com', '3', 'background.png', 1),
-(2, 'Martin', 'Alice', 'alice.martin@mail.com', '4', 'background.png', 2),
-(3, 'Durand', 'Louis', 'louis.durand@mail.com', '2', 'background.png', 3);
-
+(1, 'enzo', 'boitte', 'jean.dupont@mail.com', '3', 1),
+(2, 'Martin', 'Alice', 'alice.martin@mail.com', '4', 2),
+(3, 'Durand', 'Louis', 'louis.durand@mail.com', '2', 3);
 
 -- Inserts table regle
 INSERT INTO regle VALUES

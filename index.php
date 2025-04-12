@@ -214,9 +214,6 @@ route('/v1/event/get/all', 'POST', function ()
 
 
 
-
-
-
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 $requestUri = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 $requestUri = str_replace(str_replace("\\", "/", str_ireplace(str_ireplace("/", "\\", $_SERVER['DOCUMENT_ROOT']), "", dirname(__FILE__))), "", $requestUri);

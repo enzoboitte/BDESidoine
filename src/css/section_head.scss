@@ -16,11 +16,6 @@ section.header {
         top: 0;
         left: 0;
         width: 100%;
-<<<<<<< HEAD
-        height: 50px;
-
-        z-index: 1000;
-=======
         height: fit-content;
 
         z-index: 1000;
@@ -44,7 +39,6 @@ section.header {
             
             cursor: pointer;
         }
->>>>>>> main
     }
 
     div.center {
@@ -61,10 +55,6 @@ section.header {
         width: 100%;
         background-color: rgba(0, 0, 0, 0.35);
 
-<<<<<<< HEAD
-        a {
-            margin: auto 0;
-=======
         z-index: 500;
 
         div.title {
@@ -81,7 +71,6 @@ section.header {
 
         a {
             margin-top: 15dvh;
->>>>>>> main
             text-decoration: none;
             color: white;
             font-size: 18px;
@@ -90,38 +79,21 @@ section.header {
             background-color: #656F6E;
             width: fit-content;
             padding: 10px 20px;
-<<<<<<< HEAD
-        }
-    }
-
-    img.montain, img.bg {
-=======
             cursor: pointer;
         }
     }
 
     img.montain/*, img.bg*/ {
->>>>>>> main
         position: absolute;
         bottom: 0;
         left: 0;
         width: 100%;
         object-fit: cover;
-<<<<<<< HEAD
-=======
         pointer-events: none;
->>>>>>> main
     }
 
     img.montain {
         object-position: 0 1px;
-<<<<<<< HEAD
-    }
-
-    img.bg {
-        z-index: -1;
-    }
-=======
         z-index: 501;
     }
 
@@ -151,5 +123,4 @@ section.header {
         right: 0;
         top: 0;
     }*/
->>>>>>> main
 }
