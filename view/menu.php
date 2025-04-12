@@ -2,6 +2,7 @@
 global $G_sPath;
 $G_sCss .= "@import url('$G_sPath/src/css/menu.scss');";
 ?>
+
 <nav id="menu" class="menu">
     <ul>
         <!-- back button <i class="fa fa-arrow-left"></i> -->
