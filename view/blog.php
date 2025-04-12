@@ -1,3 +1,6 @@
+<?php 
+global $G_sPath, $G_sRacine;
+$G_sCss .= "@import url('$G_sPath/src/css/blog/blog.css');"; ?>
 <section class="blog-container">
     <form class="blog-controls" method="GET" action="index.php">
         <input type="hidden" name="link" value="blog">
@@ -29,7 +32,7 @@
                         <span><?= htmlspecialchars($article['date']) ?></span>
                     </div>
                     <div class="article-bottom">
-                        <a class="see-more-btn" href="index.php?link=blogDetails&id=<?= $article['id'] ?>">Voir plus</a>
+                        <a class="see-more-btn" href="index.php?link=blogAjax&id=<?= $article['id'] ?>">Voir plus</a>
                     </div>
                 </div>
             </div>

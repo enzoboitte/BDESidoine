@@ -11,7 +11,8 @@ $G_lActions = [
     "default"     => "home",
     "home"        => "home",
     "blog"        => "blog",
-    "blogDetails" => "blogDetails",
+    "nos-membres" => "nosMembres",
+
 
     "404"       => "404",
     "405"       => "405"

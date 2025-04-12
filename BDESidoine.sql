@@ -98,6 +98,25 @@ CREATE TABLE nommer(
 	FOREIGN KEY(idA) REFERENCES annee(idA)
 ) Engine=InnoDB;
 
+
+CREATE TABLE IF NOT EXISTS `articles` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `auteur` varchar(255) NOT NULL,
+  `date` datetime NOT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Inters table articles
+INSERT INTO `articles` (`id`, `title`, `description`, `auteur`, `date`, `image`) VALUES
+(1, 'Lancement de la BDE Night', 'Une soirée inoubliable organisée par le BDE !', 'Martin Dupont', '2025-03-15 20:00:00', 'background.png'),
+(2, 'Tournoi de Football 2025', 'Venez nombreux au tournoi inter-promos !', 'Claire Bernard', '2025-04-01 14:00:00', 'background.png'),
+(3, 'Sortie Ski', 'Sortie au ski avec hébergement et matériel fourni !', 'Lucas Moreau', '2025-01-20 09:00:00', 'background.png'),
+(4, 'Atelier CV & Lettre de motivation', 'Améliore ton CV avec nos coachs RH !', 'Julie Nguyen', '2025-02-10 16:30:00', 'background.png'),
+(5, 'Soirée Gaming LAN', 'Tournoi de jeux en réseau sur le campus', 'Antoine Lefèvre', '2025-03-05 18:00:00', 'background.png');
+
 -- Inserts table role
 INSERT INTO role VALUES
 (1, 'Président'),

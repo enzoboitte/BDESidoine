@@ -1,0 +1,231 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #f9f9f9;
+    color: #333;
+}
+
+.titre-page {
+    text-align: center;
+    font-size: 2.7rem;
+    margin: 2rem 0 1.5rem;
+    color: #3a1d1d;
+}
+
+.form-annee {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.form-annee label {
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.form-annee select {
+    padding: 8px 14px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: white;
+    transition: all 0.2s ease;
+    margin-left: 0.5rem;
+}
+
+.form-annee select:focus {
+    border-color: #b37c7d;
+    box-shadow: 0 0 6px rgba(179, 124, 125, 0.5);
+    outline: none;
+}
+
+.organigramme-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    padding: 0 1rem 4rem;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+h2 {
+    font-size: 2rem;
+    color: #822b2b;
+    margin-bottom: 1rem;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.niveau,
+.niveau-membres,
+.membres-sous {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 3rem;
+    margin-bottom: 2rem;
+}
+
+.niveau-responsable {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.niveau-responsable::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 35px;
+    background: #bbb;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.niveau-membres::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    height: 2px;
+    width: 70%;
+    max-width: 400px;
+    background: #bbb;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.membre {
+    background: radial-gradient(circle at 30% 30%, #b37c7d, #a35b5d);
+    border-radius: 50%;
+    color: white;
+    width: 160px;
+    height: 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 1rem;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+    transition: transform 0.35s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.membre:hover {
+    transform: scale(1.08);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+    z-index: 2;
+}
+
+.membre img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid white;
+    margin-bottom: 0.5rem;
+    transition: transform 0.4s ease;
+}
+
+.membre:hover img {
+    transform: scale(1.12);
+}
+
+.membre strong {
+    font-size: 1rem;
+    line-height: 1.2;
+}
+
+.membre span {
+    font-size: 0.75rem;
+    font-weight: 300;
+    color: #f3f3f3;
+}
+
+.responsable::after {
+    content: '';
+    width: 2px;
+    height: 40px;
+    background: #888;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.pole {
+    text-align: center;
+    width: 100%;
+    max-width: 1000px;
+    padding: 2rem;
+    background-color: #fffafa;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+    margin-bottom: 2.5rem;
+    position: relative;
+    transition: box-shadow 0.3s ease;
+}
+
+.pole:hover {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 768px) {
+    .membre {
+        width: 120px;
+        height: 120px;
+        padding: 0.6rem;
+    }
+
+    .membre img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .titre-page {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    .niveau-membres::before {
+        width: 60%;
+    }
+}
+
+@media (max-width: 480px) {
+    .membre {
+        width: 95px;
+        height: 95px;
+        padding: 0.5rem;
+    }
+
+    .membre img {
+        width: 45px;
+        height: 45px;
+    }
+
+    .membre strong {
+        font-size: 0.8rem;
+    }
+
+    .membre span {
+        font-size: 0.6rem;
+    }
+
+    .niveau-membres::before {
+        width: 40%;
+    }
+}
