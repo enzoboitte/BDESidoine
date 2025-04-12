@@ -1,6 +1,8 @@
 <?php 
-global $G_sPath;
+global $G_sPath, $G_lPermission, $G_sRacine;
 $G_sCss .= "@import url('$G_sPath/src/css/dashboard/calendar.scss');";
+
+require_once "$G_sRacine/model/Permission.php";
 ?>
 <!-- back button -->
 <a href="<?= $G_sPath ?>/dashboard/" class="back-button">Retour</a>
@@ -11,6 +13,7 @@ $G_sCss .= "@import url('$G_sPath/src/css/dashboard/calendar.scss');";
         <h3 id="weekDisplay"></h3>
         <button onclick="changeWeek(1)">&gt;</button>
     </div>
+    <?php if((new CRegle)->F_bIsAutorise(ERegle::CREATE_EVENT, $G_lPermission)): ?>
     <button onclick="toggleForm()">Ajouter un événement</button>
     <div class="event-form" id="eventForm">
         <input type="text" id="eventTitle" placeholder="Titre de l'événement">
@@ -25,6 +28,7 @@ $G_sCss .= "@import url('$G_sPath/src/css/dashboard/calendar.scss');";
         </select>
         <button onclick="submitEvent()">Ajouter</button>
     </div>
+    <?php endif; ?>
     <div class="calendar-grid" id="calendarGrid"></div>
 </div>
 
@@ -94,6 +98,8 @@ $G_sCss .= "@import url('$G_sPath/src/css/dashboard/calendar.scss');";
         renderWeek(new Date(currentDate));
     }
 
+
+    <?php if((new CRegle)->F_bIsAutorise(ERegle::CREATE_EVENT, $G_lPermission)): ?>
     function toggleForm() {
         const form = document.getElementById('eventForm');
         form.style.display = form.style.display === 'block' ? 'none' : 'block';
@@ -142,6 +148,7 @@ $G_sCss .= "@import url('$G_sPath/src/css/dashboard/calendar.scss');";
             alert('Merci de remplir tous les champs.');
         }
     }
+    <?php endif; ?>
 
     function displayEvents(firstDayOfWeek) {
         const start = new Date(firstDayOfWeek);
