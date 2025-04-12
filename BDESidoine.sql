@@ -162,7 +162,12 @@ INSERT INTO image (idP, path) VALUES
 INSERT INTO contient VALUES
 (1, 1),
 (1, 2),
-(2, 1);
+(1, 3),
+(1, 4),
+(1, 9),
+(1, 10),
+(1, 11),
+(1, 12);
 
 -- Inserts table nommer
 INSERT INTO nommer VALUES
