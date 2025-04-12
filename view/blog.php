@@ -1,6 +1,7 @@
 <?php 
 global $G_sPath, $G_sRacine;
-$G_sCss .= "@import url('$G_sPath/src/css/blog/blog.css');"; ?>
+$G_sCss .= "@import url('$G_sPath/src/css/blog/blog.css');"; 
+?>
 
 <section class="blog-container">
     <form class="blog-controls" method="GET" action="index.php">
@@ -22,17 +23,17 @@ $G_sCss .= "@import url('$G_sPath/src/css/blog/blog.css');"; ?>
             <?php foreach ($articles as $article): ?>
                 <div class="article-card">
                     <div class="article-image">
-                        <img src="src/img/blog/<?= htmlspecialchars($article['image']) ?>" alt="Image article">
+                        <img src="src/img/blog/<?= htmlspecialchars($article['_imageP']) ?>" alt="Image poste">
                     </div>
                     <div class="article-content">
-                        <h2 class="article-title"><?= htmlspecialchars($article['title']) ?></h2>
-                        <p class="article-description"><?= htmlspecialchars($article['description']) ?></p>
+                        <h2 class="article-title"><?= htmlspecialchars($article['titreP']) ?></h2>
+                        <p class="article-description"><?= htmlspecialchars($article['descriptionP']) ?></p>
                         <div class="article-meta">
-                            <span><?= htmlspecialchars($article['auteur']) ?></span>
-                            <span><?= htmlspecialchars($article['date']) ?></span>
+                            <span><?= htmlspecialchars($article['auteur'] ?? 'Auteur inconnu') ?></span>
+                            <span><?= htmlspecialchars($article['dateP']) ?></span>
                         </div>
                         <div class="article-bottom">
-                        <a class="see-more-btn" href="index.php?link=articledetails&id=<?= $article['id'] ?>">Voir plus</a>
+                            <a class="see-more-btn" href="index.php?link=articledetails&id=<?= $article['idP'] ?>">Voir plus</a>
                         </div>
                     </div>
                 </div>
@@ -49,6 +50,3 @@ $G_sCss .= "@import url('$G_sPath/src/css/blog/blog.css');"; ?>
         </a>
     <?php endfor; ?>
 </div>
-
-
-</section>

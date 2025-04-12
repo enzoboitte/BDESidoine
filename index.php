@@ -203,16 +203,7 @@ route('/v1/event/get/all', 'POST', function ()
 });
 
 
-if (isset($_GET['link'])) {
-    $link = $_GET['link'];
-    F_vRequest($link);
-    exit;
-}
 
-
-route('/blog', 'GET', function() {
-    include 'controler/blog/body.php';
-});
 
 
 
