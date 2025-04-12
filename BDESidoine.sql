@@ -1,7 +1,7 @@
-DROP DATABASE IF exists `bdBDESidoine`;
-CREATE DATABASE IF NOT exists `bdBDESidoine`;
+DROP DATABASE IF exists `bdbdesidoine`;
+CREATE DATABASE IF NOT exists `bdbdesidoine`;
 
-use `bdBDESidoine`;
+use `bdbdesidoine`;
 
 CREATE TABLE role(
 	idRo INT,
