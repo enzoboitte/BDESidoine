@@ -124,7 +124,12 @@ INSERT INTO regle VALUES
 (9, 'Créer un événement', 'CREATE_EVENT'),
 (10, 'Supprimer un événement', 'DELETE_EVENT'),
 (11, 'Modifier un événement', 'UPDATE_EVENT'),
-(12, 'Lire un événement', 'READ_EVENT');
+(12, 'Lire un événement', 'READ_EVENT'),
+
+(13, 'Créer un compte', 'CREATE_ACCOUNT'),
+(14, 'Supprimer un compte', 'DELETE_ACCOUNT'),
+(15, 'Modifier un compte', 'UPDATE_ACCOUNT'),
+(16, 'Lire un compte', 'READ_ACCOUNT');
 
 -- Inserts table annee
 INSERT INTO annee VALUES
@@ -167,7 +172,11 @@ INSERT INTO contient VALUES
 (1, 9),
 (1, 10),
 (1, 11),
-(1, 12);
+(1, 12),
+(1, 13),
+(1, 14),
+(1, 15),
+(1, 16);
 
 -- Inserts table nommer
 INSERT INTO nommer VALUES

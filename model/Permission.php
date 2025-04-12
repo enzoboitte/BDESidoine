@@ -11,6 +11,10 @@ enum ERegle: int
     case DELETE_EVENT = 10;
     case UPDATE_EVENT = 11;
     case READ_EVENT = 12;
+    case CREATE_MEMBER = 13;
+    case DELETE_MEMBER = 14;
+    case UPDATE_MEMBER = 15;
+    case READ_MEMBER = 16;
 }
 
 class CRegle

@@ -17,10 +17,12 @@ require_once "$G_sRacine/model/Permission.php";
         </div>
         <?php endif; ?>
 
+        <?php if((new CRegle)->F_bIsAutorise(ERegle::READ_MEMBER, $G_lPermission)): ?>
         <div class="panel-card purple">
             <h3>Membres &<br>Comptes</h3>
             <a class="btn-circle"><i class="fa fa-arrow-right"></i></a>
         </div>
+        <?php endif; ?>
 
         <?php if((new CRegle)->F_bIsAutorise(ERegle::READ_POST, $G_lPermission)): ?>
         <div class="panel-card brown">
