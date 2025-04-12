@@ -12,6 +12,7 @@ $G_lActions = [
     "home"        => "home",
     "blog"        => "blog",
     "nos-membres" => "nosMembres",
+    "articledetails" => "articledetails",
 
 
     "404"       => "404",

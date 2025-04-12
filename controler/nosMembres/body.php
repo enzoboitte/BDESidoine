@@ -6,9 +6,6 @@ $CMembers = new CMembers();
 $members = $CMembers->getMembersByYear($year);
 
 $G_sBackBtn=true;
-<<<<<<< HEAD
-=======
 include "$G_sRacine/view/section_head.php";
->>>>>>> main
 include "$G_sRacine/view/menu.php";
 include "$G_sRacine/view/nosMembres.php";

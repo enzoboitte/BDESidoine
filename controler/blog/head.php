@@ -7,6 +7,3 @@ if ($_SERVER["SCRIPT_FILENAME"] == __FILE__) {
 include "$G_sRacine/view/section_head.php"; 
 include "$G_sRacine/view/header.php";
 ?>
-
-<!--CSS de la page blog -->
-<link rel="stylesheet" href="src/css/blog.css">
