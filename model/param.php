@@ -14,6 +14,8 @@ $G_lActions = [
     
     "dashboard"   => "dashboard",
     "dashboard/home" => "dashboard/home",
+    "dashboard/blog" => "dashboard/blog",
+    "dashboard/membrecomptes" => "dashboard/membrecomptes",
     "dashboard/calendar" => "dashboard/calendar",
     "blog"        => "blog",
     

@@ -48,4 +48,11 @@ class CArticle extends CPDOModel
 
         return $article;
     }
+
+    public function getAllPosts()
+    {
+        $stmt = $this->F_cGetDB()->prepare("SELECT idP, dateP, titreP, descriptionP, _imageP FROM poste ORDER BY dateP DESC");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

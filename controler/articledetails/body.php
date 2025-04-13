@@ -17,5 +17,5 @@ if (!$article) {
 }
 
 $G_sBackBtn = true;
-include "$G_sRacine/view/menu.php";
+include "$G_sRacine/view/top_page.php";
 include "$G_sRacine/view/articledetails.php";
