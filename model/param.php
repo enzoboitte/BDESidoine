@@ -21,6 +21,7 @@ $G_lActions = [
     
     "nos-membres" => "nosMembres",
     "articledetails" => "articledetails",
+    "mentions-legales"=>"mentions-legales",
 
 
     "404"       => "404",

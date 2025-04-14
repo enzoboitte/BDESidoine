@@ -10,3 +10,4 @@ $members = $CMembers->getMembersByYear($year);
 //include "$G_sRacine/view/menu.php";
 include "$G_sRacine/view/top_page.php";
 include "$G_sRacine/view/nosMembres.php";
+include "$G_sRacine/view/footer.php";

@@ -12,8 +12,41 @@ require_once "$G_sRacine/model/Permission.php";
 
     <div class="table-header">
         <span class="header-title">Liste des articles</span>
-        <a href="<?= $G_sPath ?>/dashboard/blog/add" class="btn-action add" title="Ajouter un article">➕</a>
+
+
+        <button onclick="openAddModal()" class="btn-add">
+            <i class="fa fa-plus"></i> Ajouter un article
+        </button>
     </div>
+
+
+    <div id="addModal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2>Ajouter un article</h2>
+                <button onclick="closeAddModal()" class="modal-close">&times;</button>
+            </div>
+            <form action="<?= $G_sPath ?>/dashboard/blog" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="action" value="add">
+
+                <label for="titre">Titre :</label>
+                <input type="text" id="titre" name="titre" required>
+
+                <label for="date">Date :</label>
+                <input type="date" id="date" name="date" required>
+
+                <label for="description">Description :</label>
+                <textarea id="description" name="description" required></textarea>
+
+                <label for="image">Image :</label>
+                <input type="file" id="image" name="image">
+
+
+                <button type="submit" class="modal-submit">Ajouter</button>
+            </form>
+        </div>
+    </div>
+
 
     <div class="custom-table">
         <div class="table-head">
@@ -47,3 +80,21 @@ require_once "$G_sRacine/model/Permission.php";
         <?php endif; ?>
     </div>
 </div>
+
+
+<script>
+function openAddModal() {
+    document.getElementById("addModal").style.display = "flex";
+}
+
+function closeAddModal() {
+    document.getElementById("addModal").style.display = "none";
+}
+
+window.onclick = function(event) {
+    const modal = document.getElementById("addModal");
+    if (event.target === modal) {
+        modal.style.display = "none";
+    }
+}
+</script>

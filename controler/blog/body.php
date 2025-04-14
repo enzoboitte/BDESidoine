@@ -21,3 +21,4 @@ $currentPage = $page;
 //include "$G_sRacine/view/menu.php";
 include "$G_sRacine/view/top_page.php";
 include "$G_sRacine/view/blog.php";
+include "$G_sRacine/view/footer.php";

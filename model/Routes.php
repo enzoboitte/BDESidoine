@@ -87,4 +87,6 @@ function getRouteParams($requestedPath, $registeredPath)
             $params[] = $requestedParts[$key] ?? null;
     }
     return $params;
+
+
 }

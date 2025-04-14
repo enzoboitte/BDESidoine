@@ -1,0 +1,172 @@
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4f6f8;
+    margin: 0;
+    padding: 20px;
+}
+
+h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.back-button {
+    background: #666;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    margin-bottom: 20px;
+    display: inline-block;
+}
+
+.btn-success {
+    background: #2ecc71;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.membres-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.carte-membre {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    gap: 20px;
+}
+
+.photo-membre {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ccc;
+}
+
+.infos {
+    flex: 1;
+}
+
+.infos h4 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.infos p {
+    margin: 2px 0;
+    color: #555;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn-edit,
+.btn-delete {
+    padding: 6px 12px;
+    border-radius: 6px;
+    color: white;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-edit {
+    background: #3498db;
+}
+
+.btn-delete {
+    background: #e74c3c;
+}
+
+/* Modales */
+.modale {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background-color: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modale.hidden {
+    display: none;
+}
+
+.modale-contenu {
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    position: relative;
+}
+
+.modale-contenu h3 {
+    margin-top: 0;
+}
+
+.modale-contenu label {
+    display: block;
+    margin-top: 10px;
+}
+
+.modale-contenu input,
+.modale-contenu select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.modale-actions {
+    margin-top: 15px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.btn-save {
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-cancel {
+    background-color: #ccc;
+    color: black;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.modale-fermer {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+}
