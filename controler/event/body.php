@@ -5,6 +5,7 @@ if ($_SERVER["SCRIPT_FILENAME"] == __FILE__ ){
 
 include "$G_sRacine/view/top_page.php";
 include "$G_sRacine/model/Event.php";
+
 /*$event = new CEvents();
 $events = $event->getEvents();
 

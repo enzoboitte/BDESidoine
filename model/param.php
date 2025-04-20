@@ -14,11 +14,14 @@ $G_lActions = [
     
     "dashboard"   => "dashboard",
     "dashboard/home" => "dashboard/home",
+    "dashboard/blog" => "dashboard/blog",
+    "dashboard/membrecomptes" => "dashboard/membrecomptes",
     "dashboard/calendar" => "dashboard/calendar",
     "blog"        => "blog",
     
     "nos-membres" => "nosMembres",
     "articledetails" => "articledetails",
+    "mentions-legales"=>"mentions-legales",
 
 
     "404"       => "404",

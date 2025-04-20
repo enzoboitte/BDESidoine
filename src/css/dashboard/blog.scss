@@ -1,0 +1,258 @@
+/* -------------------- GÉNÉRAL -------------------- */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  background: #f7f7f7;
+  margin: 0;
+  padding: 20px;
+}
+
+.dashboard-container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.08);
+}
+
+h1 {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.back-button {
+  display: inline-block;
+  margin-bottom: 20px;
+  padding: 8px 16px;
+  background: #ccc;
+  color: #000;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.back-button:hover {
+  background: #bbb;
+}
+
+/* -------------------- BOUTON AJOUT -------------------- */
+.btn-add {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background-color 0.3s;
+}
+
+.btn-add:hover {
+  background-color: #3e8e41;
+}
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* -------------------- MODALE -------------------- */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-box {
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.modal-close {
+  font-size: 24px;
+  font-weight: bold;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #666;
+}
+
+.modal-close:hover {
+  color: #000;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-form label {
+  margin-top: 12px;
+  font-weight: 600;
+}
+
+.modal-form input[type="text"],
+.modal-form input[type="date"],
+.modal-form input[type="file"],
+.modal-form textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-top: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.modal-form textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.modal-submit {
+  margin-top: 20px;
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 15px;
+  align-self: flex-start;
+}
+
+.modal-submit:hover {
+  background-color: #3e8e41;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* -------------------- TABLEAU/CARTES -------------------- */
+.custom-table {
+  margin-top: 30px;
+}
+
+.table-head {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 15px;
+  background-color: #ddd;
+  font-weight: bold;
+  border-radius: 8px;
+}
+
+.table-row {
+  display: flex;
+  justify-content: space-between;
+  background-color: #fafafa;
+  border: 1px solid #eee;
+  margin: 10px 0;
+  padding: 15px;
+  border-radius: 10px;
+  transition: box-shadow 0.2s;
+}
+
+.table-row:hover {
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.row-left {
+  flex: 1;
+}
+
+.row-left div {
+  margin-bottom: 6px;
+}
+
+.row-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-action {
+  font-size: 20px;
+  text-decoration: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+.btn-action.edit {
+  background-color: #2196F3;
+  color: white;
+}
+
+.btn-action.delete {
+  background-color: #f44336;
+  color: white;
+}
+
+.btn-action:hover {
+  opacity: 0.85;
+}
+
+.img-miniature {
+  width: 100px;
+  height: auto;
+  border-radius: 6px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+}
+
+/* -------------------- RESPONSIVE -------------------- */
+@media (max-width: 768px) {
+  .table-row {
+    flex-direction: column;
+  }
+
+  .row-right {
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-top: 10px;
+  }
+
+  .modal-box {
+    width: 95%;
+  }
+}

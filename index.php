@@ -214,6 +214,47 @@ route('/blog', 'GET', function() {
 
 
 
+// Route pour obtenir tous les membres
+route('/dashboard/membrecomptes', 'GET', function() {
+    $controller = new MembreController();
+    $controller->index();
+});
+
+// Route pour ajouter un membre
+route('/dashboard/membrecomptes/add', 'POST', function() {
+    $controller = new MembreController();
+    $controller->add();
+});
+
+// Route pour afficher le formulaire d'ajout
+route('/dashboard/membrecomptes/add', 'GET', function() {
+    $controller = new MembreController();
+    $controller->add();
+});
+
+// Route pour modifier un membre
+route('/dashboard/membrecomptes/edit', 'POST', function() {
+    $id = $_GET['id'] ?? null;
+    $controller = new MembreController();
+    $controller->edit($id);
+});
+
+// Route pour afficher le formulaire de modification
+route('/dashboard/membrecomptes/edit', 'GET', function() {
+    $id = $_GET['id'] ?? null;
+    $controller = new MembreController();
+    $controller->edit($id);
+});
+
+// Route pour supprimer un membre
+route('/dashboard/membrecomptes/delete', 'POST', function() {
+    $id = $_GET['id'] ?? null;
+    $controller = new MembreController();
+    $controller->delete($id);
+});
+
+
+
 
 $requestMethod = $_SERVER['REQUEST_METHOD'];
 $requestUri = urldecode(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));

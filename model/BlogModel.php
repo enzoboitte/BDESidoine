@@ -39,7 +39,7 @@ class CArticle extends CPDOModel
         $article = $stmt->fetch();
 
         if ($article) {
-            $sqlImgs = "SELECT filename FROM posteImages WHERE poste_id = :id";
+            $sqlImgs = "SELECT _imageP FROM poste WHERE idP = :id";
             $stmtImg = $this->F_cGetDB()->prepare($sqlImgs);
             $stmtImg->bindParam(':id', $id, PDO::PARAM_INT);
             $stmtImg->execute();
@@ -48,4 +48,20 @@ class CArticle extends CPDOModel
 
         return $article;
     }
+
+    public function getAllPosts()
+    {
+        $stmt = $this->F_cGetDB()->prepare("SELECT idP, dateP, titreP, descriptionP, _imageP FROM poste ORDER BY dateP DESC");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+    public function addPost($titre, $date, $description, $image = null) {
+        $pdo = F_cGetDB();
+        $query = "INSERT INTO poste (titreP, dateP, descriptionP, _imageP, idC) VALUES (?, ?, ?, ?, 1)";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute([$titre, $date, $description, $image]);
+    }
+    
 }
