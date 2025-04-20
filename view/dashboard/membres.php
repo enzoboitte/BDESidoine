@@ -1,7 +1,7 @@
 <?php
 global $G_sPath;
+$G_sCss .= "@import url('$G_sPath/src/css/dashboard/membres.css');";
 ?>
-<link rel="stylesheet" href="<?= $G_sPath ?>/src/css/dashboard/membres.css">
 
 <a href="<?= $G_sPath ?>/dashboard/" class="back-button">Retour</a>
 <h2>Gestion des membres</h2>
@@ -19,15 +19,8 @@ global $G_sPath;
             <p><?= $m['tel'] ?></p>
         </div>
         <div class="actions">
-            <button class="btn-edit"
-                data-id="<?= $m['idM'] ?>"
-                data-prenom="<?= $m['prenom'] ?>"
-                data-nom="<?= $m['nom'] ?>"
-                data-mail="<?= $m['mail'] ?>"
-                data-tel="<?= $m['tel'] ?>"
-                data-role="<?= $m['idRo'] ?>"
-            >Modifier</button>
-            <a href="<?= $G_sPath ?>/dashboard/membres/action.php?action=delete&id=<?= $m['idM'] ?>" class="btn-delete" data-prenom="<?= $m['prenom'] ?>">Supprimer</a>
+            <a class="btn-edit" data-id="<?= $m['idM'] ?>">Modifier</a>
+            <a class="btn-delete" data-id="<?= $m['idM'] ?>">Supprimer</a>
         </div>
     </div>
 <?php endforeach; ?>
@@ -46,8 +39,8 @@ global $G_sPath;
       <label>Rôle</label>
       <select name="role" required>
         <option value="">-- Choisir un rôle --</option>
-        <?php foreach ((new CRole())->getAllRoles() as $r): ?>
-        <option value="<?= $r['idRo'] ?>"><?= $r['libelle'] ?></option>
+        <?php foreach ((new CRoles())->getRoles() as $r): ?>
+        <option value="<?= $r->getIdRo() ?>"><?= $r->getLibelle() ?></option>
         <?php endforeach; ?>
       </select>
       <label>Photo</label><input type="file" name="photo" accept="image/*">
@@ -74,8 +67,8 @@ global $G_sPath;
       <label>Rôle</label>
       <select name="role" id="edit-role" required>
         <option value="">-- Choisir un rôle --</option>
-        <?php foreach ((new CRole())->getAllRoles() as $r): ?>
-        <option value="<?= $r['idRo'] ?>"><?= $r['libelle'] ?></option>
+        <?php foreach ((new CRoles())->getRoles() as $r): ?>
+        <option value="<?= $r->getIdRo() ?>"><?= $r->getLibelle() ?></option>
         <?php endforeach; ?>
       </select>
       <label>Photo</label><input type="file" name="photo">

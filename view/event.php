@@ -3,8 +3,8 @@ global $G_sPath;
 $G_sCss .= "@import url('$G_sPath/src/css/event.scss');";
 
 include_once "$G_sRacine/model/Event.php";
-$events = (new CEvents(true))->getEvents();
-$pastEvents = (new CEvents(false))->getEvents(); // événements passés
+$events = (new CEvents(true))->getEvents("event");
+$pastEvents = (new CEvents(false))->getEvents("event"); // événements passés
 ?>
 
 <section id="event">

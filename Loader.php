@@ -35,6 +35,7 @@ function F_cGetDate()
     return new DateTime($l_iAnnee."-01-01");
 }
 
+$G_sYear = F_cGetDate()->format("Y");
 $G_sDate = F_cGetDate()->format("Y-m-d");
 $G_lPermission = [];
 

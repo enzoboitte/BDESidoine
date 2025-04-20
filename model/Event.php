@@ -68,7 +68,15 @@ class CEvents extends CPDOModel
     // method to get all events
     public function getEvents()
     {
-        return $this->events;
+        $l_lEvents = [];
+
+        foreach ($this->events as $event) 
+        {
+            if($event->getType() != "event") continue;
+            $l_lEvents[] = $event;
+        }
+
+        return $l_lEvents;
     }
 
     // method to get an event by id F_lGetEvent
