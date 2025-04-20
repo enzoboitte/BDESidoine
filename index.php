@@ -104,7 +104,7 @@ route('/v1/event/add/', 'POST', function ()
 });
 
 # /v1/event/rm/{id}
-route('/v1/event/rm/{id}', 'POST', function ($l_sId) 
+route('/v1/event/rm/{}', 'DELETE', function ($l_sId) 
 {
     global $G_sRacine,$G_sPath;
     include_once "$G_sRacine/model/Account.php";
@@ -124,7 +124,7 @@ route('/v1/event/rm/{id}', 'POST', function ($l_sId)
 });
 
 # /v1/event/update/{id},{title},{date},{hour},{type}
-route('/v1/event/update/{},{},{},{},{}', 'POST', function ($l_sId, $l_sTitle, $l_sDate, $l_sHour, $l_sType) 
+route('/v1/event/update/', 'PUT', function () 
 {
     global $G_sRacine,$G_sPath;
     include_once "$G_sRacine/model/Account.php";
@@ -136,15 +136,23 @@ route('/v1/event/update/{},{},{},{},{}', 'POST', function ($l_sId, $l_sTitle, $l
         exit;
     }
 
-    $res = (new CEvents())->F_bUpdateEvent($l_sId, $l_sTitle, $l_sDate, $l_sHour, $l_sType);
+    //$l_sTitle, $l_sDate, $l_sHour, $l_sType dans le body de la requête {"title":"fghdfgh","date":"2025-04-07","hour":"15:00","type":"event"}
+    $data = json_decode(file_get_contents('php://input'), true);
+    $l_sId = $data['id'];
+    $l_sTitle = $data['title'];
+    $l_sDate = $data['date'];
+    $l_sHour = $data['hour'];
+    $l_sType = $data['type'];
+
+    $res = (new CEvents())->F_bUpdateEvent($l_sId, $l_sTitle, "$l_sDate $l_sHour", "", $l_sType);
     echo json_encode([
             "code" => $res,
             "msg" => "ok"
         ]);
 });
 
-# /v1/event/get/{id}
-route('/v1/event/get/{id}', 'POST', function ($l_sId) 
+# /v1/event/get/week/{date}
+route('/v1/event/get/week/', 'POST', function () 
 {
     global $G_sRacine,$G_sPath;
     include_once "$G_sRacine/model/Account.php";
@@ -156,16 +164,18 @@ route('/v1/event/get/{id}', 'POST', function ($l_sId)
         exit;
     }
 
-    $e = new CEvents();
-    $e->F_vLoadAllEvents();
-    $res = $e->F_lGetEvent($l_sId);
+    $data = json_decode(file_get_contents('php://input'), true);
+    $l_sDate = $data['date'];
 
+    $e = new CEvents();
+    $res = $e->F_lGetEventByDate($l_sDate);
     $events = [];
 
     foreach ($res as $event) 
     {
         $events[] = $event->toJson();
     }
+
     echo json_encode([
             "code" => $events,
             "msg" => "ok"
@@ -198,6 +208,28 @@ route('/v1/event/get/all', 'POST', function ()
 
     echo json_encode([
             "code" => $events,
+            "msg" => "ok"
+        ]);
+});
+
+# /v1/event/get/{id}
+route('/v1/event/get/{}', 'POST', function ($l_sId) 
+{
+    global $G_sRacine,$G_sPath;
+    include_once "$G_sRacine/model/Account.php";
+    include_once "$G_sRacine/model/Event.php";
+    
+    if(!(new CAccount())->F_bIsConnect())
+    {
+        header("Location: $G_sPath/");
+        exit;
+    }
+
+    $e = new CEvents();
+    $e->F_vLoadAllEvents();
+    $res = $e->F_lGetEvent($l_sId);
+    echo json_encode([
+            "code" => $res->toJson(),
             "msg" => "ok"
         ]);
 });

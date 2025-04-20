@@ -14,32 +14,90 @@ require_once "$G_sRacine/model/Permission.php";
         <button onclick="changeWeek(1)">&gt;</button>
     </div>
     <?php if((new CRegle)->F_bIsAutorise(ERegle::CREATE_EVENT, $G_lPermission)): ?>
-    <button onclick="toggleForm()">Ajouter un événement</button>
-    <div class="event-form" id="eventForm">
-        <input type="text" id="eventTitle" placeholder="Titre de l'événement">
-        <input type="date" id="eventDate">
-        <!--<select id="eventHour"></select>-->
-        <input type="time" id="eventHour" placeholder="Heure de l'événement">
-        <select id="eventType">
+    <button class="btn-add">Ajouter un événement</button>
+    <?php endif; ?>
+    <div class="calendar-grid" id="calendarGrid"></div>
+</div>
+
+<?php if((new CRegle)->F_bIsAutorise(ERegle::CREATE_EVENT, $G_lPermission)): ?>
+<div id="modale-add" class="modale hidden">
+    <div class="modale-contenu">
+        <span class="modale-fermer" id="close-add-modal">&times;</span>
+        <h3>Ajout d'un événement</h3>
+        
+        <label>Titre</label><input type="text" id="eventTitle" placeholder="Titre de l'événement">
+        <label>Date</label><input type="date" id="eventDate">
+        
+        <label>Heure</label><input type="time" id="eventHour" placeholder="Heure de l'événement">
+        <label>Type</label><select id="eventType">
             <option value="event">Événement</option>
             <option value="reunion">Réunion</option>
             <option value="rdv">Rendez-vous</option>
             <option value="tache">Tâche</option>
         </select>
-        <button onclick="submitEvent()">Ajouter</button>
+        <div class="modale-actions">
+            <button onclick="submitEvent()" class="btn-save">Ajouter</button>
+            <button type="button" class="btn-cancel cancel-add">Annuler</button>
+        </div>        
     </div>
-    <?php endif; ?>
-    <div class="calendar-grid" id="calendarGrid"></div>
 </div>
+<?php endif; ?>
+
+<?php if((new CRegle)->F_bIsAutorise(ERegle::UPDATE_EVENT, $G_lPermission) || 
+    (new CRegle)->F_bIsAutorise(ERegle::DELETE_EVENT, $G_lPermission)): ?>
+<div id="modale-edit" class="modale hidden">
+    <div class="modale-contenu">
+        <span class="modale-fermer" id="close-edit-modal">&times;</span>
+        <h3>Modifier un événement</h3>
+        
+        <label>Titre</label><input type="text" id="eventTitle" placeholder="Titre de l'événement">
+        <label>Date</label><input type="date" id="eventDate">
+        
+        <label>Heure</label><input type="time" id="eventHour" placeholder="Heure de l'événement">
+        <label>Type</label><select id="eventType">
+            <option value="event">Événement</option>
+            <option value="reunion">Réunion</option>
+            <option value="rdv">Rendez-vous</option>
+            <option value="tache">Tâche</option>
+        </select>
+        <div class="modale-actions">
+            <?php if((new CRegle)->F_bIsAutorise(ERegle::UPDATE_EVENT, $G_lPermission)): ?>
+            <button onclick="modifyEvent()" class="btn-save">Modifier</button>
+            <?php endif; ?>
+            <?php if((new CRegle)->F_bIsAutorise(ERegle::DELETE_EVENT, $G_lPermission)): ?>
+            <button onclick="removeEvent()" class="btn-remove">Supprimer</button>
+            <?php endif; ?>
+            <button type="button" class="btn-cancel cancel-edit">Annuler</button>
+        </div>        
+    </div>
+</div>
+<?php endif; ?>
 
 <script>
     let currentDate = new Date();
     let events = [];
 
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2) 
+            month = '0' + month;
+        if (day.length < 2) 
+            day = '0' + day;
+
+        return [year, month, day].join('-');
+    }
+
     // recuperer les événements de l'API
     function getEvents() {
+        //const date = formatDate(new Date(currentDate));
+        const first = currentDate.getDate() - currentDate.getDay() + (currentDate.getDay() === 0 ? -6 : 1);
+        const date = formatDate(new Date(currentDate.setDate(first)));
         // et une version pour utiliser la fonction CallApi
-        CallApi("POST", "/v1/event/get/all", {}).then(response => {
+        CallApi("POST", `/v1/event/get/week/`, {date: `${date} 00:00`}).then(response => {
             if (response.ok) {
                 return response.json();
             } else {
@@ -95,16 +153,12 @@ require_once "$G_sRacine/model/Permission.php";
 
     function changeWeek(direction) {
         currentDate.setDate(currentDate.getDate() + direction * 7);
+        getEvents();
         renderWeek(new Date(currentDate));
     }
 
 
     <?php if((new CRegle)->F_bIsAutorise(ERegle::CREATE_EVENT, $G_lPermission)): ?>
-    function toggleForm() {
-        const form = document.getElementById('eventForm');
-        form.style.display = form.style.display === 'block' ? 'none' : 'block';
-    }
-
     function submitEvent() {
         const title = document.getElementById('eventTitle').value;
         const date = document.getElementById('eventDate').value;
@@ -113,7 +167,8 @@ require_once "$G_sRacine/model/Permission.php";
         if (title && date && hour) {
             //events.push({ title, date, hour, type });
             //renderWeek(currentDate);
-            toggleForm();
+            //toggleForm();
+            document.getElementById('modale-add').classList.add('hidden');
 
             // appel API pour ajouter l'événement
             CallApi("POST", "/v1/event/add", { title, date, hour, type })
@@ -150,6 +205,94 @@ require_once "$G_sRacine/model/Permission.php";
     }
     <?php endif; ?>
 
+    <?php if((new CRegle)->F_bIsAutorise(ERegle::UPDATE_EVENT, $G_lPermission)): ?>
+    function modifyEvent() {
+        const eventId = document.getElementById('modale-edit').dataset.id;
+        const title = document.querySelector('#modale-edit #eventTitle').value;
+        const date = document.querySelector('#modale-edit #eventDate').value;
+        const hour = document.querySelector('#modale-edit #eventHour').value;
+        const type = document.querySelector('#modale-edit #eventType').value;
+        if (eventId && title && date && hour && type) {
+            //events.push({ title, date, hour, type });
+            //renderWeek(currentDate);
+            //toggleForm();
+            document.getElementById('modale-edit').classList.add('hidden');
+
+            // appel API pour modifier l'événement
+            CallApi("PUT", "/v1/event/update", { id: eventId, title: title, date: date, hour: hour, type: type })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Network response was not ok');
+                    }
+                })
+                .then(data => {
+                    let res = data.msg;
+                    if (res == "ok") {
+                        console.log("Event updated successfully");
+
+                        // recuperation de tous les événements de l'API
+                        getEvents(); // refresh events after updating
+                    } else {
+                        console.error("Failed to update event");
+                    }
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+
+            // vider le formulaire
+            document.getElementById('eventTitle').value = '';
+            document.getElementById('eventDate').value = '';
+            document.getElementById('eventHour').value = '';
+            document.getElementById('eventType').value = 'event';
+        } else {
+            alert('Merci de remplir tous les champs.');
+        }
+    }
+    <?php endif; ?>
+
+    <?php if((new CRegle)->F_bIsAutorise(ERegle::DELETE_EVENT, $G_lPermission)): ?>
+    function removeEvent() {
+        const eventId = document.getElementById('modale-edit').dataset.id;
+        if (eventId) {
+            document.getElementById('modale-edit').classList.add('hidden');
+            // appel API pour supprimer l'événement
+            CallApi("DELETE", `/v1/event/rm/${eventId}`)
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Network response was not ok');
+                    }
+                })
+                .then(data => {
+                    let res = data.msg;
+                    if (res == "ok") {
+                        console.log("Event removed successfully");
+
+                        // recuperation de tous les événements de l'API
+                        getEvents(); // refresh events after removing
+                    } else {
+                        console.error("Failed to remove event");
+                    }
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+
+            // vider le formulaire
+            document.getElementById('eventTitle').value = '';
+            document.getElementById('eventDate').value = '';
+            document.getElementById('eventHour').value = '';
+            document.getElementById('eventType').value = 'event';
+        } else {
+            alert('Merci de sélectionner un événement à supprimer.');
+        }
+    }
+    <?php endif; ?>
+
     function displayEvents(firstDayOfWeek) {
         const start = new Date(firstDayOfWeek);
         start.setHours(0, 0, 0, 0);
@@ -177,6 +320,30 @@ require_once "$G_sRacine/model/Permission.php";
                     eventElement.addEventListener('click', function() {
                         const eventId = this.getAttribute('data-id');
                         console.log(`Event ID: ${eventId}`);
+                        
+                        // ici on peut faire un appel API pour recuperer les infos de l'événement et les afficher dans le formulaire
+                        CallApi("POST", `/v1/event/get/${eventId}`)
+                            .then(response => {
+                                if (response.ok) {
+                                    return response.json();
+                                } else {
+                                    throw new Error('Network response was not ok');
+                                }
+                            })
+                            .then(data => {
+                                let res = data.code;
+                                if (res) {
+                                    document.querySelector('#modale-edit #eventTitle').value = res.titre;
+                                    document.querySelector('#modale-edit #eventDate').value = res.debut.split(" ")[0];
+                                    document.querySelector('#modale-edit #eventHour').value = res.debut.split(" ")[1].substring(0, 5);
+                                    document.querySelector('#modale-edit #eventType').value = res.type;
+                                    document.getElementById('modale-edit').classList.remove('hidden');
+                                    document.getElementById('modale-edit').dataset.id = eventId;
+                                }
+                            })
+                            .catch(error => {
+                                console.error('There was a problem with the fetch operation:', error);
+                            });
                     });
                 }
             }
@@ -199,4 +366,20 @@ require_once "$G_sRacine/model/Permission.php";
     // CallApi("PUT", "/v1/event/update", {id: 1, title: "test", date: "2023-10-01", hour: "12:00", type: "event"});
     // CallApi("GET", "/v1/event/get", {id: 1});
     // CallApi("GET", "/v1/event/get/all", {});
+
+    document.querySelectorAll('.btn-add').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.getElementById('modale-add').classList.remove('hidden');
+        });
+    });
+    document.getElementById('close-add-modal').addEventListener('click', () => {
+        document.getElementById('modale-add').classList.add('hidden');
+    });
+
+    document.querySelectorAll('.cancel-add, .cancel-edit, #close-edit-modal').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.getElementById('modale-add').classList.add('hidden');
+            document.getElementById('modale-edit').classList.add('hidden');
+        });
+    });
 </script>

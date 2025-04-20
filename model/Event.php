@@ -65,14 +65,33 @@ class CEvents extends CPDOModel
         //die(var_dump($this->events));
     }
 
+    // load all event by date < (date + 7 days)
+    public function F_lGetEventByDate($date)
+    {
+        $query = "SELECT `idE`, `titre`, `phrase`, `debut`, `img`, `type` FROM `event` WHERE `debut` >= :date AND `debut` <= DATE_ADD(:date, INTERVAL 7 DAY) ORDER BY `debut` ASC;";
+        $result = $this->F_cGetDB()->prepare($query);
+        $result->bindParam(':date', $date, PDO::PARAM_STR);
+        $result->execute();
+        $result->setFetchMode(PDO::FETCH_ASSOC);
+
+        $events = [];
+
+        foreach ($result as $row) {
+            $events[] = new CEvent($row['idE'], $row['titre'], $row['phrase'], $row['debut'], $row['img'], $row['type']);
+        }
+
+        return $events;
+    }
+
+
     // method to get all events
-    public function getEvents()
+    public function getEvents(string $l_sType="")
     {
         $l_lEvents = [];
 
         foreach ($this->events as $event) 
         {
-            if($event->getType() != "event") continue;
+            if($l_sType != "" && ($event->getType() != $l_sType)) continue;
             $l_lEvents[] = $event;
         }
 
@@ -83,7 +102,8 @@ class CEvents extends CPDOModel
     public function F_lGetEvent($idE)
     {
         foreach ($this->events as $event) {
-            if ($event->getIdE() == $idE) {
+            if ($event->getIdE() == $idE) 
+            {
                 return $event;
             }
         }

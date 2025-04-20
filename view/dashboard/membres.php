@@ -19,8 +19,8 @@ $G_sCss .= "@import url('$G_sPath/src/css/dashboard/membres.css');";
             <p><?= $m['tel'] ?></p>
         </div>
         <div class="actions">
-            <a class="btn-edit" data-id="<?= $m['idM'] ?>">Modifier</a>
-            <a class="btn-delete" data-id="<?= $m['idM'] ?>">Supprimer</a>
+            <a class="btn-edit" data-id="<?= $m['idM'] ?>">✏️</a>
+            <a class="btn-delete" data-id="<?= $m['idM'] ?>">🗑️</a>
         </div>
     </div>
 <?php endforeach; ?>

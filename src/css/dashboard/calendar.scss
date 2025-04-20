@@ -87,6 +87,7 @@ button {
 }
 
 button:hover {
+    color: white;
     background: #5f8f63;
 }
 
@@ -101,6 +102,119 @@ button:hover {
 .event-form input, .event-form select {
     margin: 5px;
     padding: 5px;
+}
+
+/* -------------------- MODALE -------------------- */
+.modale {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background-color: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modale.hidden {
+    display: none;
+}
+
+.modale-contenu {
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    position: relative;
+}
+
+.modale-contenu h3 {
+    margin-top: 0;
+}
+
+.modale-contenu label {
+    display: block;
+    margin-top: 10px;
+}
+
+.modale-contenu input,
+.modale-contenu select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.modale-actions {
+    margin-top: 15px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.btn-save {
+    background-color: #5f8f63;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+
+    font-weight: bold;
+    &:hover {
+        background-color: #4caf50;
+    }
+}
+
+.btn-remove {
+    background-color: #e57373;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+
+    font-weight: bold;
+    &:hover {
+        background-color: #e53935;
+    }
+}
+
+.btn-cancel {
+    background-color: #ccc;
+    color: black;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+
+    font-weight: bold;
+    &:hover {
+        background-color: #aaa;
+    }
+}
+
+.modale-fermer {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @media (max-width: 768px) {
