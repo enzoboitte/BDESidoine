@@ -1,4 +1,9 @@
 <?php
+// affichage d'erreur
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 $G_sRacine = dirname(__FILE__);
 
 $G_sPathParam = "$G_sRacine/model/param.php";

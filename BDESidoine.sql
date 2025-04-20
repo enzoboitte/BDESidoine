@@ -41,7 +41,7 @@ CREATE TABLE type_event(
 ) Engine=InnoDB;
 
 CREATE TABLE event(
-	idE INT,
+	idE INT auto_increment,
 	titre VARCHAR(150),
 	phrase VARCHAR(250),
 	debut DATETIME,
@@ -52,7 +52,7 @@ CREATE TABLE event(
 ) Engine=InnoDB;
 
 CREATE TABLE compte(
-	idC INT,
+	idC INT auto_increment,
 	mdp VARCHAR(150),
 	tmpkey varchar(300) DEFAULT '',
 	idM INT NOT NULL,
