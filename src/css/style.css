@@ -15,7 +15,7 @@ body {
 }
 
 .back-button {
-    position: absolute;
+    position: sticky;
     top: 10px;
     left: 10px;
     background-color: #f0f0f0;

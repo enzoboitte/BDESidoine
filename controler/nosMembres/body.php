@@ -1,5 +1,6 @@
 <?php
-require_once "model/CMembers.php";
+global $G_sRacine;
+require_once "$G_sRacine/model/Members.php";
 
 $year = $_GET['annee'] ?? '2024-2025';
 $CMembers = new CMembers();
