@@ -1,5 +1,55 @@
 <?php
 include_once "$G_sRacine/model/PDOModel.php";
+require_once "$G_sRacine/model/Role.php";
+
+class CMember 
+{
+    private $idM;
+    private $nom;
+    private $prenom;
+    private $mail;
+    private $tel;
+    private $_image;
+    private $role;
+
+    public function __construct($idM, $nom, $prenom, $mail, $tel, $_image, $role = null) {
+        $this->idM = $idM;
+        $this->nom = $nom;
+        $this->prenom = $prenom;
+        $this->mail = $mail;
+        $this->tel = $tel;
+        $this->_image = $_image;
+        $this->role = $role;
+    }
+
+    public function getIdM() {
+        return $this->idM;
+    }
+
+    public function getNom() {
+        return $this->nom;
+    }
+
+    public function getPrenom() {
+        return $this->prenom;
+    }
+
+    public function getMail() {
+        return $this->mail;
+    }
+
+    public function getTel() {
+        return $this->tel;
+    }
+
+    public function getImage() {
+        return $this->_image;
+    }
+
+    public function getRole() {
+        return $this->role;
+    }
+}
 
 class CMembers extends CPDOModel
 {
@@ -15,12 +65,17 @@ class CMembers extends CPDOModel
         ");
         $stmt->bindParam(':annee', $libelleAnnee);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $members = array_map(function($m) {
+            return new CMember($m['idM'], $m['nom'], $m['prenom'], $m['mail'], $m['tel'], $m['image'], new CRole($m['idRo'], $m['role']));
+        }, $res);
+        return $members;
     }
 
     public function getMembreById($id) {
         $stmt = $this->F_cGetDB()->prepare("
-            SELECT m.*, r.libelle AS role
+            SELECT m.*, r.libelle AS role, r.idRo
             FROM membre m
             INNER JOIN nommer n ON m.idM = n.idM
             INNER JOIN role r ON n.idRo = r.idRo
@@ -28,7 +83,11 @@ class CMembers extends CPDOModel
             LIMIT 1
         ");
         $stmt->execute(['id' => $id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $res = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($res) {
+            return new CMember($res['idM'], $res['nom'], $res['prenom'], $res['mail'], $res['tel'], $res['image'], new CRole($res['idRo'], $res['role']));
+        }
+        return null;
     }
 
     public function addMembre($data) {

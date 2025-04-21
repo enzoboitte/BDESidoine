@@ -22,7 +22,7 @@ class CEvents extends CPDOModel
     // method to load events from the database
     private function loadEvents()
     {
-        $query = "SELECT `idE`, `titre`, `phrase`, `debut`, `img`, `type` FROM `event` WHERE `debut` < CURRENT_TIME() ORDER BY `debut` ASC;";
+        $query = "SELECT `idE`, `titre`, `phrase`, `debut`, `img`, `type` FROM `event` WHERE `debut` < CURRENT_TIME() ORDER BY `debut` DESC;";
         $result = $this->F_cGetDB()->prepare($query);
         $result->execute();
         $result->setFetchMode(PDO::FETCH_ASSOC);

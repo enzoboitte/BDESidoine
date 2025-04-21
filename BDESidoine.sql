@@ -15,6 +15,7 @@ CREATE TABLE membre(
 	prenom VARCHAR(50),
 	mail VARCHAR(150),
 	tel char,
+	image VARCHAR(254),
 	idRo INT NOT NULL,
 	FOREIGN KEY(idRo) REFERENCES role(idRo),
 	PRIMARY KEY(idM)
@@ -111,9 +112,9 @@ INSERT INTO role VALUES
 
 -- Inserts table membre
 INSERT INTO membre VALUES
-(1, 'enzo', 'boitte', 'jean.dupont@mail.com', '3', 1),
-(2, 'Martin', 'Alice', 'alice.martin@mail.com', '4', 2),
-(3, 'Durand', 'Louis', 'louis.durand@mail.com', '2', 3);
+(1, 'boitte', 'enzo', 'jean.dupont@mail.com', '3', '', 1),
+(2, 'Martin', 'Alice', 'alice.martin@mail.com', '4', '', 2),
+(3, 'Durand', 'Louis', 'louis.durand@mail.com', '2', '', 3);
 
 -- Inserts table regle
 INSERT INTO regle VALUES

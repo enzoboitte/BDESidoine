@@ -82,22 +82,28 @@ section#event {
     margin-top: 60px;
     text-align: center;
     color: white;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 40px;
 }
 
 .past-section h2 {
     font-size: 1.2rem;
-    margin-bottom: 10px;
+    font-weight: bold;
 
     color: #000;
 
-    &::after {
+    /*&::after {
         content: '';
         display: block;
         width: 50px;
         height: 2px;
         background: #000;
         margin: 10px auto;
-    }
+    }*/
 }
 
 .past-events {
@@ -146,13 +152,14 @@ section#event {
 .past-badges {
     display: flex;
     gap: 5px;
+    background:#43a047;
+    border-radius: 20px;
+    padding: 0 10px;
 }
 
 .badge {
-    background: #43a047;
     color: white;
-    padding: 2px 10px;
-    border-radius: 20px;
+    padding: 4px 0;
     font-size: 0.7rem;
     white-space: nowrap;
 }
