@@ -45,3 +45,34 @@ function F_feCallFile(l_sPath, l_sMethode="POST", l_lParams = {})
             console.error('Erreur:', error);
         });
 }
+
+// fonction d'appel de lien api /v1/event/add/...,...,..... | /v1/event/rm/... | /v1/event/update/...,...,..... pour ajouter/supprimer/modifier les événements 
+function CallApi(sMethod, sUrl, oData, formatText="json") 
+{
+    let l_cData = null;
+    if(formatText === "json")
+    {
+        l_cData = JSON.stringify(oData);
+    } else if(formatText === "url")
+    {
+        l_cData = new URLSearchParams(oData).toString();
+    } if(formatText === "formData")
+    {
+        let data = new FormData();
+        for (const key in oData) {
+            if (oData.hasOwnProperty(key)) {
+                data.append(key, oData[key]);
+            }
+        }
+        l_cData = data;
+    }
+
+
+    return fetch(`${G_sPath}${sUrl}`, {
+        method: sMethod,
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: l_cData
+    })
+}

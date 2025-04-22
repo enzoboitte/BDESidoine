@@ -108,6 +108,8 @@ h2 {
     width: 100%;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
 .modale-contenu h3 {

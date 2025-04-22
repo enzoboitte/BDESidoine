@@ -9,6 +9,9 @@
         <link rel="stylesheet" href="<?= $G_sPath?>/src/css/style.css">
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+        <script>
+            const G_sPath = "<?= $G_sPath ?>";
+        </script>
         <script src="<?= $G_sPath ?>/src/js/var_env.js"></script>
 
         <?php 

@@ -47,3 +47,50 @@ if(isset($_SESSION["tmpkey"]))
 
     $G_lPermission = (new CAccount())->F_lGetPermission($G_sDate);
 }
+
+// Utilisation de cette fonction pour parser les données multipart
+function parse_raw_http_request() {
+    $rawData = file_get_contents('php://input');
+    $boundary = substr($rawData, 0, strpos($rawData, "\r\n"));
+
+    $parts = array_slice(explode($boundary, $rawData), 1);
+    $data = [];
+
+    foreach ($parts as $part) {
+        if ($part == "--\r\n") break; 
+
+        $part = ltrim($part, "\r\n");
+        list($raw_headers, $body) = explode("\r\n\r\n", $part, 2);
+        $headers = [];
+        foreach (explode("\r\n", $raw_headers) as $header) {
+            list($name, $value) = explode(':', $header);
+            $headers[strtolower(trim($name))] = trim($value);
+        }
+
+        if (isset($headers['content-disposition'])) {
+            preg_match('/name="([^"]+)"/', $headers['content-disposition'], $matches);
+            $fieldName = $matches[1];
+
+            if (strpos($headers['content-disposition'], 'filename=') !== false) {
+                preg_match('/filename="([^"]+)"/', $headers['content-disposition'], $matches);
+                $originalFilename = $matches[1];
+                $fileContent = substr($body, 0, strlen($body) - 2);
+
+                $tmp_name = tempnam(sys_get_temp_dir(), 'upload_');
+                file_put_contents($tmp_name, $fileContent);
+
+                $data['_FILES'][$fieldName] = [
+                    'name' => $originalFilename,
+                    'type' => $headers['content-type'],
+                    'tmp_name' => $tmp_name,
+                    'error' => 0,
+                    'size' => strlen($fileContent),
+                ];
+            } else {
+                $data['_POST'][$fieldName] = substr($body, 0, strlen($body) - 2);
+            }
+        }
+    }
+
+    return $data;
+}

@@ -14,7 +14,7 @@ $pastEvents = (new CEvents(false))->getEvents("event"); // événements passés
             <div class="first-card">
                 <?php $event = array_shift($events); ?>
                 <div class="card">
-                <img src="<?= $G_sPath."/src/img/uploads/".htmlspecialchars($event->getImg()) ?>" alt="event">
+                <img src="<?= $G_sPath.htmlspecialchars($event->getImg()) ?>" alt="event">
                 <h3><?= htmlspecialchars($event->getTitre()) ?></h3>
                 <p><?= htmlspecialchars($event->getPhrase()) ?></p>
                 <div class="card-footer">
@@ -27,7 +27,7 @@ $pastEvents = (new CEvents(false))->getEvents("event"); // événements passés
                 <?php foreach ($events as $event): ?>
                     <?php if($event->getType() != "event") continue; ?>
                     <div class="card">
-                        <img src="<?= $G_sPath."/src/img/uploads/".htmlspecialchars($event->getImg()) ?>" alt="event">
+                        <img src="<?= $G_sPath.htmlspecialchars($event->getImg()) ?>" alt="event">
                         <h3><?= htmlspecialchars($event->getTitre()) ?></h3>
                         <p><?= htmlspecialchars($event->getPhrase()) ?></p>
                         <div class="card-footer">
@@ -52,7 +52,7 @@ $pastEvents = (new CEvents(false))->getEvents("event"); // événements passés
             <?php if($event->getType() != "event") continue; ?>
             <div class="past-card">
                 <div class="past-info">
-                    <img src="<?= $G_sPath."/src/img/uploads/".htmlspecialchars($event->getImg()) ?>" alt="event">
+                    <img src="<?= $G_sPath.htmlspecialchars($event->getImg()) ?>" alt="event">
                     <div class="past-title"><?= htmlspecialchars($event->getTitre()) ?></div>
                 </div>
                 <div class="past-badges">

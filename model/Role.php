@@ -24,6 +24,21 @@ class CRole
     {
         return $this->libelle;
     }
+
+    // toJson
+    public function toJson(): array
+    {
+        return [
+            'idRo' => $this->idRo,
+            'libelle' => $this->libelle,
+        ];
+    }
+
+    // toJsonString
+    public function toJsonString(): string
+    {
+        return json_encode($this->toJson());
+    }
 }
 
 // CRoles

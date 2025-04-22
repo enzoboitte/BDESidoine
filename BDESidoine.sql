@@ -14,7 +14,7 @@ CREATE TABLE membre(
 	nom VARCHAR(50),
 	prenom VARCHAR(50),
 	mail VARCHAR(150),
-	tel char,
+	tel VARCHAR(10),
 	image VARCHAR(254),
 	idRo INT NOT NULL,
 	FOREIGN KEY(idRo) REFERENCES role(idRo),
@@ -59,7 +59,7 @@ CREATE TABLE compte(
 	idM INT NOT NULL,
 	PRIMARY KEY(idC),
 	UNIQUE(idM),
-	FOREIGN KEY(idM) REFERENCES membre(idM)
+	FOREIGN KEY(idM) REFERENCES membre(idM) ON DELETE CASCADE
 ) Engine=InnoDB;
 
 CREATE TABLE poste(
@@ -69,8 +69,8 @@ CREATE TABLE poste(
 	descriptionP TEXT,
 	_imageP TEXT,
 	idC INT NOT NULL,
-	PRIMARY KEY(idP),
-	FOREIGN KEY(idC) REFERENCES compte(idC)
+	PRIMARY KEY(idP)
+	-- FOREIGN KEY(idC) REFERENCES compte(idC)
 ) Engine=InnoDB;
 
 CREATE TABLE image(
@@ -94,10 +94,11 @@ CREATE TABLE nommer(
 	idRo INT,
 	idA DATE,
 	PRIMARY KEY(idM, idA),
-	FOREIGN KEY(idM) REFERENCES membre(idM),
+	FOREIGN KEY(idM) REFERENCES membre(idM) ON DELETE CASCADE,
 	FOREIGN KEY(idRo) REFERENCES role(idRo),
 	FOREIGN KEY(idA) REFERENCES annee(idA)
 ) Engine=InnoDB;
+
 
 -- Inserts table role
 INSERT INTO role VALUES
@@ -182,7 +183,8 @@ INSERT INTO contient VALUES
 -- Inserts table nommer
 INSERT INTO nommer VALUES
 (1, 1, '2024-01-01'),
-(1, 2, '2025-01-01');
+(2, 2, '2024-01-01'),
+(3, 6, '2024-01-01');
 
 
 

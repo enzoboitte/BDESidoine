@@ -128,10 +128,20 @@ button:hover {
     width: 100%;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
 .modale-contenu h3 {
     margin-top: 0;
+}
+
+.modale-contenu .image {
+    width: 100px;
+    height: 100px;
+    border-radius: 1000px;
+    object-fit: cover;
+    margin: 20px auto 10px;
 }
 
 .modale-contenu label {

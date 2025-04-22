@@ -4,7 +4,7 @@ require_once "$G_sRacine/model/Members.php";
 
 $year = $_GET['annee'] ?? '2024-2025';
 $CMembers = new CMembers();
-$members = $CMembers->getMembersByYear($year);
+$members = $CMembers->F_lMembersByYear($year);
 
 //$G_sBackBtn=true;
 //include "$G_sRacine/view/section_head.php";

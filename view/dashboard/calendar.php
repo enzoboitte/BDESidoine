@@ -35,6 +35,7 @@ require_once "$G_sRacine/model/Permission.php";
             <option value="rdv">Rendez-vous</option>
             <option value="tache">Tâche</option>
         </select>
+        <label>Photo</label><input type="file" name="photo" id="edit-photo" accept="image/*">
         <div class="modale-actions">
             <button onclick="submitEvent()" class="btn-save">Ajouter</button>
             <button type="button" class="btn-cancel cancel-add">Annuler</button>
@@ -49,6 +50,7 @@ require_once "$G_sRacine/model/Permission.php";
     <div class="modale-contenu">
         <span class="modale-fermer" id="close-edit-modal">&times;</span>
         <h3>Modifier un événement</h3>
+        <img class="image" src="" alt="event">
         
         <label>Titre</label><input type="text" id="eventTitle" placeholder="Titre de l'événement">
         <label>Date</label><input type="date" id="eventDate">
@@ -60,6 +62,7 @@ require_once "$G_sRacine/model/Permission.php";
             <option value="rdv">Rendez-vous</option>
             <option value="tache">Tâche</option>
         </select>
+        <label>Photo</label><input type="file" name="photo" id="edit-photo" accept="image/*">
         <div class="modale-actions">
             <?php if((new CRegle)->F_bIsAutorise(ERegle::UPDATE_EVENT, $G_lPermission)): ?>
             <button onclick="modifyEvent()" class="btn-save">Modifier</button>
@@ -113,7 +116,8 @@ require_once "$G_sRacine/model/Permission.php";
                     id: res[i].idE,
                     titre: res[i].titre,
                     date: res[i].debut,
-                    type: res[i].type
+                    type: res[i].type,
+                    img: res[i].img,
                 });
             }
             
@@ -164,14 +168,22 @@ require_once "$G_sRacine/model/Permission.php";
         const date = document.getElementById('eventDate').value;
         const hour = document.getElementById('eventHour').value;
         const type = document.getElementById('eventType').value;
-        if (title && date && hour) {
+        const photo = document.querySelector('#modale-add #edit-photo').files[0];
+
+        if (title && date && hour && type) {
             //events.push({ title, date, hour, type });
             //renderWeek(currentDate);
             //toggleForm();
+            let data = { title: title, date: date, hour: hour, type: type };
+
+            if (photo) {
+                data.photo = photo;
+            }
+
             document.getElementById('modale-add').classList.add('hidden');
 
             // appel API pour ajouter l'événement
-            CallApi("POST", "/v1/event/add", { title, date, hour, type })
+            CallApi("POST", "/v1/event/add", data, formatText="formData")
                 .then(response => {
                     if (response.ok) {
                         return response.json();
@@ -212,14 +224,20 @@ require_once "$G_sRacine/model/Permission.php";
         const date = document.querySelector('#modale-edit #eventDate').value;
         const hour = document.querySelector('#modale-edit #eventHour').value;
         const type = document.querySelector('#modale-edit #eventType').value;
+        const photo = document.querySelector('#modale-edit #edit-photo').files[0];
         if (eventId && title && date && hour && type) {
             //events.push({ title, date, hour, type });
             //renderWeek(currentDate);
             //toggleForm();
             document.getElementById('modale-edit').classList.add('hidden');
 
+            let data = { id: eventId, title: title, date: date, hour: hour, type: type };
+            if (photo) {
+                data.photo = photo;
+            }
+
             // appel API pour modifier l'événement
-            CallApi("PUT", "/v1/event/update", { id: eventId, title: title, date: date, hour: hour, type: type })
+            CallApi("POST", "/v1/event/update", data, formatText="formData")
                 .then(response => {
                     if (response.ok) {
                         return response.json();
@@ -334,6 +352,7 @@ require_once "$G_sRacine/model/Permission.php";
                                 let res = data.code;
                                 if (res) {
                                     document.querySelector('#modale-edit #eventTitle').value = res.titre;
+                                    document.querySelector('#modale-edit .image').src = G_sPath + res.img;
                                     document.querySelector('#modale-edit #eventDate').value = res.debut.split(" ")[0];
                                     document.querySelector('#modale-edit #eventHour').value = res.debut.split(" ")[1].substring(0, 5);
                                     document.querySelector('#modale-edit #eventType').value = res.type;
@@ -350,17 +369,7 @@ require_once "$G_sRacine/model/Permission.php";
         });
     }
     //renderWeek(currentDate);
-
-    // fonction d'appel de lien api /v1/event/add/...,...,..... | /v1/event/rm/... | /v1/event/update/...,...,..... pour ajouter/supprimer/modifier les événements 
-    function CallApi(sMethod, sUrl, oData) {
-        return fetch(`<?= $G_sPath ?>${sUrl}`, {
-            method: sMethod,
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(oData)
-        })
-    }
+    
     // CallApi("POST", "/v1/event/add", {title: "test", date: "2023-10-01", hour: "12:00", type: "event"});
     // CallApi("DELETE", "/v1/event/rm", {id: 1});
     // CallApi("PUT", "/v1/event/update", {id: 1, title: "test", date: "2023-10-01", hour: "12:00", type: "event"});

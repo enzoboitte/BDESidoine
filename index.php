@@ -40,7 +40,9 @@ function F_vRequest(string $link)
         $G_sLayout = "layout.php";
 }
 
-// route pour les requêtes API
+#############################################
+#                 API REST                  #
+#############################################
 
 # /v1/account/login/{username},{password}
 route('/v1/account/login/{},{}', 'GET', function ($l_sIdentifier, $l_sPasswd) 
@@ -76,10 +78,14 @@ route('/v1/account/logout', 'GET', function ()
     header("Location: $G_sPath/");
 });
 
+#############################################
+#                 Events                    #
+#############################################
 # /v1/event/add/{title},{date},{hour},{type}
 route('/v1/event/add/', 'POST', function () 
 {
-    global $G_sRacine,$G_sPath;
+    global $G_sRacine,$G_sPath,$G_lPermission;
+    include_once "$G_sRacine/model/Permission.php";
     include_once "$G_sRacine/model/Account.php";
     include_once "$G_sRacine/model/Event.php";
     
@@ -89,14 +95,57 @@ route('/v1/event/add/', 'POST', function ()
         exit;
     }
 
+    if(!(new CRegle)->F_bIsAutorise(ERegle::CREATE_EVENT, $G_lPermission))
+    {
+        echo json_encode([
+            "code" => "403",
+            "msg" => "Accès refusé."
+        ]);
+        exit;
+    }
+
     //$l_sTitle, $l_sDate, $l_sHour, $l_sType dans le body de la requête {"title":"fghdfgh","date":"2025-04-07","hour":"15:00","type":"event"}
-    $data = json_decode(file_get_contents('php://input'), true);
+    /*$data = json_decode(file_get_contents('php://input'), true);
     $l_sTitle = $data['title'];
     $l_sDate = $data['date'];
     $l_sHour = $data['hour'];
-    $l_sType = $data['type'];
+    $l_sType = $data['type'];*/
+    $requestData = parse_raw_http_request();
+    $_POST = $requestData['_POST'];
+    if(isset($requestData['_FILES']))
+        $_FILES = $requestData['_FILES'];
 
-    $res = (new CEvents())->F_bAddEvent($l_sTitle, $l_sDate." ".$l_sHour, "", $l_sType);
+    // formulaire envoyé en PUT avec enctype="multipart/form-data"
+    $l_sTitle = $_POST['title'];
+    $l_sDate = $_POST['date'];
+    $l_sHour = $_POST['hour'];
+    $l_sType = $_POST['type'];
+
+    // recuperer l'image envoyée par le formulaire et l'enregistrer sur le serveur dans $G_sRacine/upload/...
+    $uploadDir = $G_sRacine . '/upload';
+
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0777, true);
+        //echo "Dossier créé automatiquement : $uploadDir\n";
+    }
+
+    $l_sImage = "";
+    if(isset($_FILES['photo']) && $_FILES['photo']['error'] == UPLOAD_ERR_OK) {
+        $l_sImage = $l_sTitle . "_" . $l_sDate . "_" . date("YmdHis") . "." . pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
+        $l_sImagePath = "$G_sRacine/upload/$l_sImage";
+        
+        if (copy($_FILES['photo']['tmp_name'], to: $l_sImagePath)) {
+            //echo "Image enregistrée : $l_sImagePath\n";
+        } else {
+            //echo "Échec d'enregistrement de l'image : $l_sImagePath\n";
+        }
+        
+    } else {
+        // si pas d'image, on ne change pas l'image existante
+        $l_sImagePath = null;
+    }
+
+    $res = (new CEvents())->F_bAddEvent(htmlspecialchars($l_sTitle), htmlspecialchars($l_sDate." ".$l_sHour), isset($l_sImagePath) ? htmlspecialchars("/upload/$l_sImage") : null, htmlspecialchars($l_sType));
     echo json_encode([
             "code" => $res,
             "msg" => "ok"
@@ -106,13 +155,23 @@ route('/v1/event/add/', 'POST', function ()
 # /v1/event/rm/{id}
 route('/v1/event/rm/{}', 'DELETE', function ($l_sId) 
 {
-    global $G_sRacine,$G_sPath;
+    global $G_sRacine,$G_sPath,$G_lPermission;
+    include_once "$G_sRacine/model/Permission.php";
     include_once "$G_sRacine/model/Account.php";
     include_once "$G_sRacine/model/Event.php";
     
     if(!(new CAccount())->F_bIsConnect())
     {
         header("Location: $G_sPath/");
+        exit;
+    }
+
+    if(!(new CRegle)->F_bIsAutorise(ERegle::DELETE_EVENT, $G_lPermission))
+    {
+        echo json_encode([
+            "code" => "403",
+            "msg" => "Accès refusé."
+        ]);
         exit;
     }
 
@@ -124,9 +183,10 @@ route('/v1/event/rm/{}', 'DELETE', function ($l_sId)
 });
 
 # /v1/event/update/{id},{title},{date},{hour},{type}
-route('/v1/event/update/', 'PUT', function () 
+route('/v1/event/update/', 'POST', function () 
 {
-    global $G_sRacine,$G_sPath;
+    global $G_sRacine,$G_sPath,$G_lPermission;
+    include_once "$G_sRacine/model/Permission.php";
     include_once "$G_sRacine/model/Account.php";
     include_once "$G_sRacine/model/Event.php";
     
@@ -136,15 +196,53 @@ route('/v1/event/update/', 'PUT', function ()
         exit;
     }
 
-    //$l_sTitle, $l_sDate, $l_sHour, $l_sType dans le body de la requête {"title":"fghdfgh","date":"2025-04-07","hour":"15:00","type":"event"}
-    $data = json_decode(file_get_contents('php://input'), true);
-    $l_sId = $data['id'];
-    $l_sTitle = $data['title'];
-    $l_sDate = $data['date'];
-    $l_sHour = $data['hour'];
-    $l_sType = $data['type'];
+    if(!(new CRegle)->F_bIsAutorise(ERegle::UPDATE_EVENT, $G_lPermission))
+    {
+        echo json_encode([
+            "code" => "403",
+            "msg" => "Accès refusé."
+        ]);
+        exit;
+    }
 
-    $res = (new CEvents())->F_bUpdateEvent($l_sId, $l_sTitle, "$l_sDate $l_sHour", "", $l_sType);
+    //$l_sTitle, $l_sDate, $l_sHour, $l_sType dans le body de la requête {"title":"fghdfgh","date":"2025-04-07","hour":"15:00","type":"event"}
+    $requestData = parse_raw_http_request();
+    $_POST = $requestData['_POST'];
+    if(isset($requestData['_FILES']))
+        $_FILES = $requestData['_FILES'];
+
+    // formulaire envoyé en PUT avec enctype="multipart/form-data"
+    $l_sId = $_POST['id'];
+    $l_sTitle = $_POST['title'];
+    $l_sDate = $_POST['date'];
+    $l_sHour = $_POST['hour'];
+    $l_sType = $_POST['type'];
+
+    // recuperer l'image envoyée par le formulaire et l'enregistrer sur le serveur dans $G_sRacine/upload/...
+    $uploadDir = $G_sRacine . '/upload';
+
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0777, true);
+        //echo "Dossier créé automatiquement : $uploadDir\n";
+    }
+
+    $l_sImage = "";
+    if(isset($_FILES['photo']) && $_FILES['photo']['error'] == UPLOAD_ERR_OK) {
+        $l_sImage = $l_sTitle . "_" . $l_sDate . "_" . date("YmdHis") . "." . pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
+        $l_sImagePath = "$G_sRacine/upload/$l_sImage";
+        
+        if (copy($_FILES['photo']['tmp_name'], to: $l_sImagePath)) {
+            //echo "Image enregistrée : $l_sImagePath\n";
+        } else {
+            //echo "Échec d'enregistrement de l'image : $l_sImagePath\n";
+        }
+        
+    } else {
+        // si pas d'image, on ne change pas l'image existante
+        $l_sImagePath = null;
+    }
+
+    $res = (new CEvents())->F_bUpdateEvent($l_sId, htmlspecialchars($l_sTitle), htmlspecialchars("$l_sDate $l_sHour"), isset($l_sImagePath) ? htmlspecialchars("/upload/$l_sImage") : null, htmlspecialchars($l_sType));
     echo json_encode([
             "code" => $res,
             "msg" => "ok"
@@ -154,13 +252,23 @@ route('/v1/event/update/', 'PUT', function ()
 # /v1/event/get/week/{date}
 route('/v1/event/get/week/', 'POST', function () 
 {
-    global $G_sRacine,$G_sPath;
+    global $G_sRacine,$G_sPath,$G_lPermission;
+    include_once "$G_sRacine/model/Permission.php";
     include_once "$G_sRacine/model/Account.php";
     include_once "$G_sRacine/model/Event.php";
     
     if(!(new CAccount())->F_bIsConnect())
     {
         header("Location: $G_sPath/");
+        exit;
+    }
+
+    if(!(new CRegle)->F_bIsAutorise(ERegle::READ_EVENT, $G_lPermission))
+    {
+        echo json_encode([
+            "code" => "403",
+            "msg" => "Accès refusé."
+        ]);
         exit;
     }
 
@@ -185,13 +293,23 @@ route('/v1/event/get/week/', 'POST', function ()
 # /v1/event/get/all
 route('/v1/event/get/all', 'POST', function () 
 {
-    global $G_sRacine,$G_sPath;
+    global $G_sRacine,$G_sPath,$G_lPermission;
+    include_once "$G_sRacine/model/Permission.php";
     include_once "$G_sRacine/model/Account.php";
     include_once "$G_sRacine/model/Event.php";
     
     if(!(new CAccount())->F_bIsConnect())
     {
         header("Location: $G_sPath/");
+        exit;
+    }
+
+    if(!(new CRegle)->F_bIsAutorise(ERegle::READ_EVENT, $G_lPermission))
+    {
+        echo json_encode([
+            "code" => "403",
+            "msg" => "Accès refusé."
+        ]);
         exit;
     }
 
@@ -215,13 +333,23 @@ route('/v1/event/get/all', 'POST', function ()
 # /v1/event/get/{id}
 route('/v1/event/get/{}', 'POST', function ($l_sId) 
 {
-    global $G_sRacine,$G_sPath;
+    global $G_sRacine,$G_sPath,$G_lPermission;
+    include_once "$G_sRacine/model/Permission.php";
     include_once "$G_sRacine/model/Account.php";
     include_once "$G_sRacine/model/Event.php";
     
     if(!(new CAccount())->F_bIsConnect())
     {
         header("Location: $G_sPath/");
+        exit;
+    }
+
+    if(!(new CRegle)->F_bIsAutorise(ERegle::READ_EVENT, $G_lPermission))
+    {
+        echo json_encode([
+            "code" => "403",
+            "msg" => "Accès refusé."
+        ]);
         exit;
     }
 
@@ -234,55 +362,250 @@ route('/v1/event/get/{}', 'POST', function ($l_sId)
         ]);
 });
 
+#############################################
+#                  Members                  #
+#############################################
+# /v1/members/get/{id}
+route('/v1/members/get/{}', 'POST', function ($l_sId) 
+{
+    global $G_sRacine,$G_sPath,$G_lPermission;
+    include_once "$G_sRacine/model/Permission.php";
+    include_once "$G_sRacine/model/Account.php";
+    include_once "$G_sRacine/model/Members.php";
+    
+    if(!(new CAccount())->F_bIsConnect())
+    {
+        header("Location: $G_sPath/");
+        exit;
+    }
 
-if (isset($_GET['link'])) {
-    $link = $_GET['link'];
-    F_vRequest($link);
-    exit;
-}
-route('/blog', 'GET', function() {
-    include 'controler/blog/body.php';
+    if(!(new CRegle)->F_bIsAutorise(ERegle::READ_MEMBER, $G_lPermission))
+    {
+        echo json_encode([
+            "code" => "403",
+            "msg" => "Accès refusé."
+        ]);
+        exit;
+    }
+
+    $e = new CMembers();
+    $res = $e->F_cMembreById($l_sId);
+
+    if ($res) {
+        echo json_encode([
+            "code" => $res->toJson(),
+            "msg" => "ok"
+        ]);
+    } else 
+    {
+        echo json_encode([
+            "code" => null,
+            "msg" => "Membre non trouvé."
+        ]);
+    }
 });
 
+# /v1/members/get/all
+route('/v1/members/get/all', 'POST', function () 
+{
+    global $G_sRacine,$G_sPath,$G_lPermission;
+    include_once "$G_sRacine/model/Permission.php";
+    include_once "$G_sRacine/model/Account.php";
+    include_once "$G_sRacine/model/Members.php";
+    
+    if(!(new CAccount())->F_bIsConnect())
+    {
+        header("Location: $G_sPath/");
+        exit;
+    }
 
+    if(!(new CRegle)->F_bIsAutorise(ERegle::READ_MEMBER, $G_lPermission))
+    {
+        echo json_encode([
+            "code" => "403",
+            "msg" => "Accès refusé."
+        ]);
+        exit;
+    }
 
-// Route pour obtenir tous les membres
-route('/dashboard/membrecomptes', 'GET', function() {
-    $controller = new MembreController();
-    $controller->index();
+    $e = new CMembers();
+    $res = $e->F_lMembersByYear(date("Y"));
+    $members = [];
+
+    foreach ($res as $member) 
+    {
+        $members[] = $member->toJson();
+    }
+
+    echo json_encode([
+            "code" => $members,
+            "msg" => "ok"
+        ]);
 });
 
-// Route pour ajouter un membre
-route('/dashboard/membrecomptes/add', 'POST', function() {
-    $controller = new MembreController();
-    $controller->add();
+# /v1/members/add/{prenom},{nom},{mail},{tel},{role}
+route('/v1/members/add/', 'POST', function () 
+{
+    global $G_sRacine,$G_sPath,$G_lPermission;
+    include_once "$G_sRacine/model/Permission.php";
+    include_once "$G_sRacine/model/Account.php";
+    include_once "$G_sRacine/model/Members.php";
+    
+    if(!(new CAccount())->F_bIsConnect())
+    {
+        header("Location: $G_sPath/");
+        exit;
+    }
+
+    if(!(new CRegle)->F_bIsAutorise(ERegle::CREATE_MEMBER, $G_lPermission))
+    {
+        echo json_encode([
+            "code" => "403",
+            "msg" => "Accès refusé."
+        ]);
+        exit;
+    }
+
+    $requestData = parse_raw_http_request();
+    $_POST = $requestData['_POST'];
+    if(isset($requestData['_FILES']))
+        $_FILES = $requestData['_FILES'];
+
+    // formulaire envoyé en POST avec enctype="multipart/form-data"
+    $l_sPrenom = $_POST['prenom'];
+    $l_sNom = $_POST['nom'];
+    $l_sMail = $_POST['mail'];
+    $l_sTel = $_POST['tel'];
+    $l_iRole = $_POST['role'];
+
+    // recuperer l'image envoyée par le formulaire et l'enregistrer sur le serveur dans $G_sRacine/upload/...
+    $uploadDir = $G_sRacine . '/upload';
+
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0777, true);
+        //echo "Dossier créé automatiquement : $uploadDir\n";
+    }
+
+    $l_sImage = "";
+    if(isset($_FILES['photo']) && $_FILES['photo']['error'] == UPLOAD_ERR_OK) {
+        $l_sImage = $l_sNom . "_" . $l_sPrenom . "_" . date("YmdHis") . "." . pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
+        $l_sImagePath = "$G_sRacine/upload/$l_sImage";
+        
+        if (copy($_FILES['photo']['tmp_name'], to: $l_sImagePath)) {
+            //echo "Image enregistrée : $l_sImagePath\n";
+        } else {
+            //echo "Échec d'enregistrement de l'image : $l_sImagePath\n";
+        }
+        
+    } else {
+        // si pas d'image, on ne change pas l'image existante
+        $l_sImagePath = null;
+    }
+
+    (new CMembers())->F_bAddMembre($l_sNom, $l_sPrenom, $l_sMail, $l_sTel, isset($l_sImagePath) ? "/upload/$l_sImage" : null, (int)$l_iRole);
+
+    echo json_encode([
+            "code" => 0,
+            "msg" => "ok"
+        ]);
 });
 
-// Route pour afficher le formulaire d'ajout
-route('/dashboard/membrecomptes/add', 'GET', function() {
-    $controller = new MembreController();
-    $controller->add();
+# /v1/members/update/{id},{prenom},{nom},{mail},{tel},{role}
+route('/v1/members/update/', 'PUT', function () 
+{
+    global $G_sRacine,$G_sPath,$G_lPermission;
+    include_once "$G_sRacine/model/Permission.php";
+    include_once "$G_sRacine/model/Account.php";
+    include_once "$G_sRacine/model/Members.php";
+    
+    if(!(new CAccount())->F_bIsConnect())
+    {
+        header("Location: $G_sPath/");
+        exit;
+    }
+
+    if(!(new CRegle)->F_bIsAutorise(ERegle::UPDATE_MEMBER, $G_lPermission))
+    {
+        echo json_encode([
+            "code" => "403",
+            "msg" => "Accès refusé."
+        ]);
+        exit;
+    }
+
+    $requestData = parse_raw_http_request();
+    $_POST = $requestData['_POST'];
+    if(isset($requestData['_FILES']))
+        $_FILES = $requestData['_FILES'];
+
+    // formulaire envoyé en PUT avec enctype="multipart/form-data"
+    $l_iId = $_POST['id'];
+    $l_sPrenom = $_POST['prenom'];
+    $l_sNom = $_POST['nom'];
+    $l_sMail = $_POST['mail'];
+    $l_sTel = $_POST['tel'];
+    $l_iRole = $_POST['role'];
+
+    // recuperer l'image envoyée par le formulaire et l'enregistrer sur le serveur dans $G_sRacine/upload/...
+    $uploadDir = $G_sRacine . '/upload';
+
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0777, true);
+        //echo "Dossier créé automatiquement : $uploadDir\n";
+    }
+
+    $l_sImage = "";
+    if(isset($_FILES['photo']) && $_FILES['photo']['error'] == UPLOAD_ERR_OK) {
+        $l_sImage = $l_sNom . "_" . $l_sPrenom . "_" . date("YmdHis") . "." . pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
+        $l_sImagePath = "$G_sRacine/upload/$l_sImage";
+        
+        if (copy($_FILES['photo']['tmp_name'], to: $l_sImagePath)) {
+            //echo "Image enregistrée : $l_sImagePath\n";
+        } else {
+            //echo "Échec d'enregistrement de l'image : $l_sImagePath\n";
+        }
+        
+    } else {
+        // si pas d'image, on ne change pas l'image existante
+        $l_sImagePath = null;
+    }
+
+    (new CMembers())->F_bUpdateMembre($l_iId, $l_sNom, $l_sPrenom, $l_sMail, $l_sTel, isset($l_sImagePath) ? "/upload/$l_sImage" : null, (int)$l_iRole);
+    
+    echo json_encode([
+            "code" => 0,
+            "msg" => "ok"
+        ]);
 });
 
-// Route pour modifier un membre
-route('/dashboard/membrecomptes/edit', 'POST', function() {
-    $id = $_GET['id'] ?? null;
-    $controller = new MembreController();
-    $controller->edit($id);
-});
+# /v1/members/rm/{id}
+route('/v1/members/rm/{}', 'DELETE', function ($l_sId) 
+{
+    global $G_sRacine,$G_sPath,$G_lPermission;
+    include_once "$G_sRacine/model/Permission.php";
+    include_once "$G_sRacine/model/Account.php";
+    include_once "$G_sRacine/model/Members.php";
+    
+    if(!(new CAccount())->F_bIsConnect())
+    {
+        header("Location: $G_sPath/");
+        exit;
+    }
 
-// Route pour afficher le formulaire de modification
-route('/dashboard/membrecomptes/edit', 'GET', function() {
-    $id = $_GET['id'] ?? null;
-    $controller = new MembreController();
-    $controller->edit($id);
-});
+    if(!(new CRegle)->F_bIsAutorise(ERegle::DELETE_MEMBER, $G_lPermission))
+    {
+        echo json_encode([
+            "code" => "403",
+            "msg" => "Accès refusé."
+        ]);
+        exit;
+    }
 
-// Route pour supprimer un membre
-route('/dashboard/membrecomptes/delete', 'POST', function() {
-    $id = $_GET['id'] ?? null;
-    $controller = new MembreController();
-    $controller->delete($id);
+    $res = (new CMembers())->F_bDeleteMembre($l_sId);
+    echo json_encode([
+            "code" => $res,
+            "msg" => "ok"
+        ]);
 });
 
 
